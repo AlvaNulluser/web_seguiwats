@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --bg-primary: #f8fafc;
+    --bg-surface: #ffffff;
+    --border-subtle: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --emerald-accent: #059669;
+    --blue-accent: #2563eb;
+  }
+
+  .dark {
+    --bg-primary: #0b0f19;
+    --bg-surface: #111827;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --emerald-accent: #10b981;
+    --blue-accent: #3b82f6;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* Custom subtle scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.3);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.5);
+  }
+}
+
+/* Glass & Aesthetic Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .glass-panel {
+  background: rgba(17, 24, 39, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .glass-card {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.glass-card:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.08);
+}
+
+.dark .glass-card:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 10px 35px -10px rgba(16, 185, 129, 0.12);
+}
+
+.glow-emerald {
+  box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.15);
+}
+
+.glow-blue {
+  box-shadow: 0 0 35px -5px rgba(37, 99, 235, 0.15);
+}
+
+/* WhatsApp speech bubble styling */
+.bubble-whatsapp-in {
+  background: #ffffff;
+  color: #111827;
+  border-radius: 0.75rem 0.75rem 0.75rem 0.15rem;
+}
+.dark .bubble-whatsapp-in {
+  background: #1f2937;
+  color: #f3f4f6;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bubble-whatsapp-out {
+  background: #dcf8c6;
+  color: #111827;
+  border-radius: 0.75rem 0.75rem 0.15rem 0.75rem;
+}
+.dark .bubble-whatsapp-out {
+  background: #064e3b;
+  color: #ecfdf5;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instrucciones de Eliminación de Datos — Seguiwats (Meta & Google Data Deletion)</title>
+  <meta name="description" content="Instrucciones paso a paso para solicitar la supresión de datos de usuario y revocación de permisos conforme a Meta Platform Terms y Google API Services.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-emerald-500/20 selection:text-emerald-400">
+  <!-- Top Global Header -->
+  <header class="sticky top-0 z-50 w-full glass-panel border-b border-slate-200/80 dark:border-white/10 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-slate-900 dark:bg-slate-800 border border-slate-700/80 flex items-center justify-center">
+          <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+          Segui<span class="text-emerald-500">wats</span>
+        </span>
+      </a>
+
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <a href="/" class="hover:text-emerald-500 transition">Inicio</a>
+        <a href="/privacy.html" class="hover:text-emerald-500 transition">Política de Privacidad</a>
+        <a href="/terms.html" class="hover:text-emerald-500 transition">Términos de Servicio</a>
+        <a href="/data-deletion.html" class="text-emerald-500 font-semibold">Eliminación de Datos</a>
+      </nav>
+
+      <div class="flex items-center space-x-3">
+        <button type="button" class="theme-toggle-btn p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 transition" aria-label="Cambiar tema">
+          <svg class="sun-icon w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <svg class="moon-icon w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+        </button>
+        <button type="button" id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white" aria-expanded="false">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-slate-200 dark:border-white/10 px-4 py-4 space-y-2">
+      <a href="/" class="block py-2 text-sm text-slate-700 dark:text-slate-200">Inicio</a>
+      <a href="/privacy.html" class="block py-2 text-sm text-slate-700 dark:text-slate-200">Política de Privacidad</a>
+      <a href="/terms.html" class="block py-2 text-sm text-slate-700 dark:text-slate-200">Términos de Servicio</a>
+      <a href="/data-deletion.html" class="block py-2 text-sm font-semibold text-emerald-500">Eliminación de Datos</a>
+    </div>
+  </header>
+
+  <main class="flex-1 py-12 lg:py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Document Header -->
+      <div class="mb-10 pb-8 border-b border-slate-200 dark:border-white/10 space-y-3">
+        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+          Requerimiento Meta User Data Deletion Instructions
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          Instrucciones para la Eliminación de Datos de Usuario
+        </h1>
+        <p class="text-sm text-slate-600 dark:text-slate-300 max-w-3xl">
+          Conforme a las directrices de la <strong>Meta Platform</strong> (WhatsApp Cloud API) y la <strong>Política de Datos de Usuario de Google</strong>, cualquier usuario o empresa cliente puede solicitar la supresión total de sus credenciales, registros y datos procesados por Seguiwats en cualquier momento.
+        </p>
+      </div>
+
+      <div class="space-y-8 text-sm text-slate-600 dark:text-slate-300">
+        
+        <!-- Summary Box -->
+        <div class="glass-card rounded-2xl p-6 border-l-4 border-l-emerald-500 border-slate-200 dark:border-white/10 space-y-2">
+          <h2 class="text-base font-bold text-slate-900 dark:text-white">
+            Nuestro Principio: Google Calendar como Única Fuente de Verdad
+          </h2>
+          <p class="text-xs text-slate-600 dark:text-slate-300">
+            Seguiwats <strong>no mantiene una base de datos secundaria</strong> que copie o clone los contactos de sus clientes. Cuando usted borra un evento en Google Calendar, este desaparece del sistema inmediatamente. No obstante, conservamos credenciales técnicas de conexión (tokens OAuth y vinculaciones de webhook de WhatsApp) que pueden ser purgadas inmediatamente siguiendo este protocolo.
+          </p>
+        </div>
+
+        <!-- Step-by-Step Instructions -->
+        <section class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-white/10 space-y-6">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+            Paso a Paso para Solicitar la Eliminación Total
+          </h3>
+
+          <div class="space-y-6">
+            <!-- Step 1 -->
+            <div class="flex items-start space-x-4">
+              <div class="w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center text-sm shrink-0">
+                1
+              </div>
+              <div class="space-y-1.5 flex-1">
+                <h4 class="font-bold text-slate-900 dark:text-white">Envío de la Solicitud</h4>
+                <p class="text-xs">
+                  Remita un correo electrónico a nuestro equipo técnico oficial: <a href="mailto:soporte@seguiwats.com" class="text-emerald-500 font-semibold underline">soporte@seguiwats.com</a> o complete el formulario rápido al final de esta página.
+                </p>
+                <div class="p-3 bg-slate-100 dark:bg-slate-900/60 rounded-lg text-xs font-mono text-slate-600 dark:text-slate-300">
+                  <p><strong>Asunto:</strong> Solicitud de Eliminación de Datos - [Su Número o Empresa]</p>
+                  <p><strong>Cuerpo:</strong> Incluya el número de WhatsApp registrado y el correo de Google Calendar vinculado.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="flex items-start space-x-4">
+              <div class="w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center text-sm shrink-0">
+                2
+              </div>
+              <div class="space-y-1.5 flex-1">
+                <h4 class="font-bold text-slate-900 dark:text-white">Validación y Desconexión Inmediata</h4>
+                <p class="text-xs">
+                  Una vez recibido el mensaje, nuestro equipo valida la titularidad del remitente y procede a:
+                </p>
+                <ul class="list-disc list-inside text-xs space-y-1 pl-1">
+                  <li>Revocar y purgar los tokens de acceso de Google OAuth 2.0.</li>
+                  <li>Desasociar el número de teléfono del webhook de Meta WhatsApp Cloud API.</li>
+                  <li>Destruir el contenedor Docker dedicado del tenant y sus volúmenes asociados.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="flex items-start space-x-4">
+              <div class="w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center text-sm shrink-0">
+                3
+              </div>
+              <div class="space-y-1.5 flex-1">
+                <h4 class="font-bold text-slate-900 dark:text-white">Confirmación y Código de Seguimiento</h4>
+                <p class="text-xs">
+                  En un plazo máximo de <strong>48 a 72 horas hábiles</strong>, recibirá un correo de confirmación formal con el <strong>código de confirmación de supresión de datos</strong> (Confirmation Tracking ID), certificando que no queda ningún registro activo en nuestra infraestructura.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Revoke Directly from Google & Meta Section -->
+        <section class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-white/10 space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+            Cómo Revocar el Acceso Directamente desde sus Cuentas
+          </h3>
+          <p class="text-xs">
+            Sin esperar la confirmación de nuestro equipo, usted tiene el control total para revocar los permisos de manera unilateral e instantánea:
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <!-- Google Revoke -->
+            <div class="p-4 rounded-xl bg-blue-500/5 border border-blue-500/20 space-y-2">
+              <h4 class="font-bold text-blue-600 dark:text-blue-400 flex items-center space-x-2 text-xs">
+                <span>📅</span>
+                <span>Revocar Permisos de Google Calendar</span>
+              </h4>
+              <ol class="list-decimal list-inside text-xs space-y-1 text-slate-600 dark:text-slate-300">
+                <li>Acceda a la sección de seguridad de su cuenta Google: <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">myaccount.google.com/permissions</a>.</li>
+                <li>Localice la aplicación <strong>"Seguiwats"</strong> en la lista de aplicaciones con acceso a terceros.</li>
+                <li>Haga clic en <strong>"Quitar acceso"</strong>.</li>
+              </ol>
+            </div>
+
+            <!-- Meta Revoke -->
+            <div class="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 space-y-2">
+              <h4 class="font-bold text-emerald-600 dark:text-emerald-400 flex items-center space-x-2 text-xs">
+                <span>💬</span>
+                <span>Desvincular WhatsApp / Meta Business</span>
+              </h4>
+              <ol class="list-decimal list-inside text-xs space-y-1 text-slate-600 dark:text-slate-300">
+                <li>Abra su administrador de Meta Business Suite / WhatsApp Business.</li>
+                <li>Vaya a <em>Configuración del Negocio &gt; Integraciones del Sistema</em>.</li>
+                <li>Desvincule el número asignado al bot de Seguiwats o elimine la suscripción al webhook.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <!-- Direct Contact Form Mockup / Mailto Trigger -->
+        <section class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-white/10 space-y-4">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+            Formulario Rápido de Solicitud de Eliminación
+          </h3>
+          <p class="text-xs">
+            Complete los siguientes campos y haga clic en "Generar Solicitud de Eliminación". Se abrirá su cliente de correo con los datos preformateados para nuestro centro de soporte:
+          </p>
+
+          <form id="data-deletion-form" class="space-y-4 pt-2" onsubmit="event.preventDefault(); const phone = document.getElementById('del-phone').value; const email = document.getElementById('del-email').value; const reason = document.getElementById('del-reason').value; const subject = encodeURIComponent('Solicitud de Eliminacion de Datos - ' + phone); const body = encodeURIComponent('Estimado equipo de Seguiwats,\n\nSolicito formalmente la eliminacion de todos mis datos, credenciales y desvinculacion de servicios asociados:\n\n- Telefono WhatsApp: ' + phone + '\n- Email Google Calendar: ' + email + '\n- Motivo (opcional): ' + reason + '\n\nQuedo a la espera del codigo de confirmacion.\n'); window.location.href = 'mailto:soporte@seguiwats.com?subject=' + subject + '&body=' + body;">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="del-phone" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  Número de WhatsApp Registrado *
+                </label>
+                <input type="text" id="del-phone" required placeholder="+54 9 11 2233-4455" class="w-full text-xs p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
+              </div>
+
+              <div>
+                <label for="del-email" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  Correo Electrónico de Google Calendar *
+                </label>
+                <input type="email" id="del-email" required placeholder="ventas@tuempresa.com" class="w-full text-xs p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
+              </div>
+            </div>
+
+            <div>
+              <label for="del-reason" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                Motivo de la solicitud (Opcional)
+              </label>
+              <textarea id="del-reason" rows="2" placeholder="Fin de prueba comercial, cambio de número, etc." class="w-full text-xs p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"></textarea>
+            </div>
+
+            <button type="submit" class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold text-xs transition shadow">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              Generar Solicitud de Eliminación Formal
+            </button>
+          </form>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="glass-panel border-t border-slate-200/80 dark:border-white/10 py-8 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex items-center space-x-2">
+        <a href="/" class="font-bold text-slate-800 dark:text-white">Segui<span class="text-emerald-500">wats</span></a>
+        <span>• Canal Oficial de Eliminación de Datos Meta</span>
+      </div>
+      <div class="flex space-x-4">
+        <a href="/" class="hover:text-emerald-500">Inicio</a>
+        <a href="/privacy.html" class="hover:text-emerald-500">Privacidad</a>
+        <a href="/terms.html" class="hover:text-emerald-500">Términos</a>
+        <a href="/data-deletion.html" class="text-emerald-500 font-semibold">Eliminación de Datos</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

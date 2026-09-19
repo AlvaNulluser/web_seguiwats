@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="sw-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <!-- Base Background Container -->
+  <rect width="64" height="64" rx="14" fill="url(#sw-grad)"/>
+  <rect width="62" height="62" x="1" y="1" rx="13" stroke="#1e293b" stroke-width="2"/>
+  
+  <!-- Calendar Base (Google Blue & Steel) -->
+  <rect x="14" y="18" width="36" height="34" rx="6" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <path d="M14 27h36" stroke="#3b82f6" stroke-width="2"/>
+  <rect x="22" y="13" width="4" height="8" rx="2" fill="#3b82f6"/>
+  <rect x="38" y="13" width="4" height="8" rx="2" fill="#3b82f6"/>
+  
+  <!-- Calendar check mark / event slot -->
+  <circle cx="23" cy="35" r="2.5" fill="#60a5fa"/>
+  <circle cx="32" cy="35" r="2.5" fill="#60a5fa"/>
+  <circle cx="41" cy="35" r="2.5" fill="#60a5fa"/>
+  <circle cx="23" cy="43" r="2.5" fill="#60a5fa"/>
+
+  <!-- WhatsApp Speech Bubble Overlay (Emerald) -->
+  <circle cx="44" cy="44" r="14" fill="url(#emerald-grad)" stroke="#0b0f19" stroke-width="2.5"/>
+  <path d="M50 49l-2-0.8a10 10 0 0 1-5 1.3c-4.4 0-8-3.4-8-7.5s3.6-7.5 8-7.5 8 3.4 8 7.5c0 1.6-.6 3.1-1.7 4.3L50 49z" fill="#ffffff" opacity="0.95"/>
+  <path d="M40.5 40.5c.3-.5.7-.5 1-.4.3.1.8.4 1 .5.2.2.3.4.2.7-.2.4-.6.8-.9 1.1-.3.3-.6.6-.3 1.1.3.5 1.2 1.6 2.4 2.1.5.2.8.2 1-.1.3-.3.6-.8.8-1 .2-.2.4-.2.7-.1.3.1.9.4 1.2.6.2.2.3.4.2.6-.2.8-.7 1.4-1.3 1.5-.6.2-1.6.2-3.3-.9-1.8-1.2-3.2-3.2-3.5-4.4-.3-1.1.2-1.7.7-2.3z" fill="#059669"/>
+</svg>

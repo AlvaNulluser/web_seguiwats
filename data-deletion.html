@@ -3,211 +3,300 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instrucciones de Eliminación de Datos — Seguiwats (Meta & Google Data Deletion)</title>
+  <title>Instrucciones de Eliminación de Datos — Seguiwats (Meta & Google Compliance)</title>
   <meta name="description" content="Instrucciones paso a paso para solicitar la supresión de datos de usuario y revocación de permisos conforme a Meta Platform Terms y Google API Services.">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/src/style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Geist', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['Geist Mono', 'monospace'],
+          },
+          colors: {
+            obsidian: '#0B0F19',
+            slateSurface: '#111827',
+            emeraldBrand: {
+              DEFAULT: '#10B981',
+              hover: '#059669',
+              subtle: 'rgba(16, 185, 129, 0.1)',
+            },
+            googleBlue: {
+              DEFAULT: '#2563EB',
+              hover: '#1D4ED8',
+              subtle: 'rgba(37, 99, 235, 0.12)',
+            },
+            titanium: '#F8FAFC',
+            mutedZinc: '#94A3B8',
+          },
+          boxShadow: {
+            emeraldGlow: '0 10px 25px -5px rgba(16, 185, 129, 0.25), 0 0 20px -2px rgba(16, 185, 129, 0.1)',
+            cardHover: '0 20px 35px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.12)',
+            blueGlow: '0 10px 25px -5px rgba(37, 99, 235, 0.25)',
+          },
+          letterSpacing: {
+            tighterDisplay: '-0.025em',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0B0F19;
+      color: #F8FAFC;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .glass-surface {
+      background: rgba(17, 24, 39, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-surface-interactive {
+      background: rgba(17, 24, 39, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-surface-interactive:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+      transform: translateY(-2px);
+    }
+    .badge-pill-emerald {
+      background: rgba(16, 185, 129, 0.09);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #34D399;
+    }
+    .badge-pill-blue {
+      background: rgba(37, 99, 235, 0.09);
+      border: 1px solid rgba(37, 99, 235, 0.28);
+      color: #60A5FA;
+    }
+    .badge-pill-zinc {
+      background: rgba(148, 163, 184, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: #CBD5E1;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B0F19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans selection:bg-emerald-500/20 selection:text-emerald-400">
-  <!-- Top Global Header -->
-  <header class="sticky top-0 z-50 w-full glass-panel border-b border-slate-200/80 dark:border-white/10 transition-colors">
+<body class="min-h-[100dvh] flex flex-col font-sans selection:bg-emeraldBrand/30 selection:text-emeraldBrand">
+
+  <!-- TOP PERSISTENT NAVBAR -->
+  <header class="sticky top-0 z-50 w-full glass-surface border-b border-white/[0.08]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <a href="/" class="flex items-center space-x-3">
-        <div class="w-9 h-9 rounded-xl bg-slate-900 dark:bg-slate-800 border border-slate-700/80 flex items-center justify-center">
-          <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="w-9 h-9 rounded-xl bg-slate-900 border border-emeraldBrand/30 flex items-center justify-center shadow-inner group-hover:border-emeraldBrand transition-colors duration-200">
+          <svg class="w-5 h-5 text-emeraldBrand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
           </svg>
         </div>
-        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-          Segui<span class="text-emerald-500">wats</span>
-        </span>
+        <div class="flex items-baseline space-x-2">
+          <span class="text-xl font-extrabold tracking-tighterDisplay text-titanium">
+            Segui<span class="text-emeraldBrand">wats</span>
+          </span>
+          <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium badge-pill-emerald">
+            Data Deletion
+          </span>
+        </div>
       </a>
 
-      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600 dark:text-slate-300">
-        <a href="/" class="hover:text-emerald-500 transition">Inicio</a>
-        <a href="/privacy.html" class="hover:text-emerald-500 transition">Política de Privacidad</a>
-        <a href="/terms.html" class="hover:text-emerald-500 transition">Términos de Servicio</a>
-        <a href="/data-deletion.html" class="text-emerald-500 font-semibold">Eliminación de Datos</a>
+      <nav class="hidden md:flex items-center space-x-7 text-sm font-medium text-mutedZinc">
+        <a href="/" class="hover:text-titanium transition-colors">Inicio</a>
+        <a href="/privacy.html" class="hover:text-titanium transition-colors">Privacidad</a>
+        <a href="/terms.html" class="hover:text-titanium transition-colors">Términos</a>
+        <a href="/data-deletion.html" class="text-emeraldBrand font-semibold flex items-center space-x-1">
+          <span>Eliminación de Datos</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-emeraldBrand"></span>
+        </a>
+        <a href="/#verificacion" class="hover:text-googleBlue transition-colors flex items-center space-x-1">
+          <span>Cumplimiento API</span>
+          <svg class="w-3.5 h-3.5 text-googleBlue" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        </a>
       </nav>
 
       <div class="flex items-center space-x-3">
-        <button type="button" class="theme-toggle-btn p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 transition" aria-label="Cambiar tema">
-          <svg class="sun-icon w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-          <svg class="moon-icon w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-        </button>
-        <button type="button" id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white" aria-expanded="false">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
+        <a href="/#simulador" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold rounded-lg bg-emeraldBrand hover:bg-emeraldBrand-hover text-obsidian shadow-emeraldGlow transition-all duration-150 transform active:scale-95 font-sans">
+          Probar Demo en Vivo
+        </a>
       </div>
-    </div>
-
-    <!-- Mobile Navigation -->
-    <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-slate-200 dark:border-white/10 px-4 py-4 space-y-2">
-      <a href="/" class="block py-2 text-sm text-slate-700 dark:text-slate-200">Inicio</a>
-      <a href="/privacy.html" class="block py-2 text-sm text-slate-700 dark:text-slate-200">Política de Privacidad</a>
-      <a href="/terms.html" class="block py-2 text-sm text-slate-700 dark:text-slate-200">Términos de Servicio</a>
-      <a href="/data-deletion.html" class="block py-2 text-sm font-semibold text-emerald-500">Eliminación de Datos</a>
     </div>
   </header>
 
-  <main class="flex-1 py-12 lg:py-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+  <main class="flex-1 py-14 lg:py-20 relative overflow-hidden">
+    <!-- Ambient Light Pools -->
+    <div class="absolute top-20 right-10 w-[500px] h-[300px] bg-emeraldBrand/5 blur-[140px] pointer-events-none rounded-full"></div>
+    <div class="absolute top-1/2 left-10 w-[450px] h-[250px] bg-googleBlue/5 blur-[130px] pointer-events-none rounded-full"></div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
       <!-- Document Header -->
-      <div class="mb-10 pb-8 border-b border-slate-200 dark:border-white/10 space-y-3">
-        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-          Requerimiento Meta User Data Deletion Instructions
+      <div class="mb-12 pb-8 border-b border-white/10 space-y-4">
+        <div class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-mono font-medium badge-pill-emerald shadow-sm">
+          <span>// META TECH PROVIDER & GOOGLE USER DATA DELETION</span>
         </div>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-titanium tracking-tighterDisplay leading-tight">
           Instrucciones para la Eliminación de Datos de Usuario
         </h1>
-        <p class="text-sm text-slate-600 dark:text-slate-300 max-w-3xl">
-          Conforme a las directrices de la <strong>Meta Platform</strong> (WhatsApp Cloud API) y la <strong>Política de Datos de Usuario de Google</strong>, cualquier usuario o empresa cliente puede solicitar la supresión total de sus credenciales, registros y datos procesados por Seguiwats en cualquier momento.
+        <p class="text-sm text-mutedZinc max-w-3xl leading-relaxed">
+          Conforme a las directrices de la <strong class="text-titanium">Meta Platform</strong> (WhatsApp Cloud API) y la <strong class="text-titanium">Política de Datos de Usuario de Google</strong>, cualquier usuario o empresa cliente puede solicitar la supresión total de sus credenciales, registros y datos procesados por Seguiwats en cualquier momento.
         </p>
       </div>
 
-      <div class="space-y-8 text-sm text-slate-600 dark:text-slate-300">
+      <div class="space-y-8 text-sm leading-relaxed text-mutedZinc font-sans">
         
         <!-- Summary Box -->
-        <div class="glass-card rounded-2xl p-6 border-l-4 border-l-emerald-500 border-slate-200 dark:border-white/10 space-y-2">
-          <h2 class="text-base font-bold text-slate-900 dark:text-white">
+        <div class="glass-surface rounded-2xl p-6 border-l-4 border-l-emeraldBrand border border-white/10 space-y-2.5">
+          <h2 class="text-base font-bold text-titanium">
             Nuestro Principio: Google Calendar como Única Fuente de Verdad
           </h2>
-          <p class="text-xs text-slate-600 dark:text-slate-300">
+          <p class="text-xs text-mutedZinc leading-relaxed">
             Seguiwats <strong>no mantiene una base de datos secundaria</strong> que copie o clone los contactos de sus clientes. Cuando usted borra un evento en Google Calendar, este desaparece del sistema inmediatamente. No obstante, conservamos credenciales técnicas de conexión (tokens OAuth y vinculaciones de webhook de WhatsApp) que pueden ser purgadas inmediatamente siguiendo este protocolo.
           </p>
         </div>
 
         <!-- Step-by-Step Instructions -->
-        <section class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-white/10 space-y-6">
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white">
-            Paso a Paso para Solicitar la Eliminación Total
+        <section class="glass-surface rounded-2xl p-6 sm:p-8 border border-white/10 space-y-6">
+          <h3 class="text-xl font-bold text-titanium font-sans flex items-center space-x-2">
+            <span class="text-emeraldBrand font-mono">//</span>
+            <span>Paso a Paso para Solicitar la Eliminación Total</span>
           </h3>
 
           <div class="space-y-6">
             <!-- Step 1 -->
             <div class="flex items-start space-x-4">
-              <div class="w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center text-sm shrink-0">
+              <div class="w-8 h-8 rounded-full bg-emeraldBrand text-obsidian font-bold flex items-center justify-center text-sm shrink-0 shadow font-mono">
                 1
               </div>
               <div class="space-y-1.5 flex-1">
-                <h4 class="font-bold text-slate-900 dark:text-white">Envío de la Solicitud</h4>
+                <h4 class="font-bold text-titanium">Envío de la Solicitud</h4>
                 <p class="text-xs">
-                  Remita un correo electrónico a nuestro equipo técnico oficial: <a href="mailto:soporte@seguiwats.com" class="text-emerald-500 font-semibold underline">soporte@seguiwats.com</a> o complete el formulario rápido al final de esta página.
+                  Remita un correo electrónico a nuestro equipo técnico oficial: <a href="mailto:soporte@seguiwats.com" class="text-emeraldBrand font-semibold underline font-mono">soporte@seguiwats.com</a> o complete el formulario rápido al final de esta página.
                 </p>
-                <div class="p-3 bg-slate-100 dark:bg-slate-900/60 rounded-lg text-xs font-mono text-slate-600 dark:text-slate-300">
-                  <p><strong>Asunto:</strong> Solicitud de Eliminación de Datos - [Su Número o Empresa]</p>
-                  <p><strong>Cuerpo:</strong> Incluya el número de WhatsApp registrado y el correo de Google Calendar vinculado.</p>
+                <div class="p-3 bg-black/40 rounded-xl text-xs font-mono text-mutedZinc border border-white/5 space-y-1">
+                  <p><strong class="text-titanium">Asunto:</strong> Solicitud de Eliminación de Datos - [Su Número o Empresa]</p>
+                  <p><strong class="text-titanium">Cuerpo:</strong> Incluya el número de WhatsApp registrado y el correo de Google Calendar vinculado.</p>
                 </div>
               </div>
             </div>
 
             <!-- Step 2 -->
             <div class="flex items-start space-x-4">
-              <div class="w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center text-sm shrink-0">
+              <div class="w-8 h-8 rounded-full bg-emeraldBrand text-obsidian font-bold flex items-center justify-center text-sm shrink-0 shadow font-mono">
                 2
               </div>
               <div class="space-y-1.5 flex-1">
-                <h4 class="font-bold text-slate-900 dark:text-white">Validación y Desconexión Inmediata</h4>
+                <h4 class="font-bold text-titanium">Verificación y Purga de Infraestructura</h4>
                 <p class="text-xs">
-                  Una vez recibido el mensaje, nuestro equipo valida la titularidad del remitente y procede a:
+                  Nuestro equipo de DevOps verificará la titularidad del número en un plazo máximo de <strong class="text-titanium">48 a 72 horas hábiles</strong> y procederá a:
                 </p>
-                <ul class="list-disc list-inside text-xs space-y-1 pl-1">
-                  <li>Revocar y purgar los tokens de acceso de Google OAuth 2.0.</li>
-                  <li>Desasociar el número de teléfono del webhook de Meta WhatsApp Cloud API.</li>
-                  <li>Destruir el contenedor Docker dedicado del tenant y sus volúmenes asociados.</li>
+                <ul class="space-y-1 text-xs text-mutedZinc list-disc list-inside">
+                  <li>Destruir las variables de entorno asociadas a su tenant en Docker.</li>
+                  <li>Revocar de forma irrevocable los tokens OAuth vinculados a Google Calendar.</li>
+                  <li>Desvincular el webhook de Meta WhatsApp Cloud API.</li>
+                  <li>Purgar cualquier registro efímero en la memoria de n8n.</li>
                 </ul>
               </div>
             </div>
 
             <!-- Step 3 -->
             <div class="flex items-start space-x-4">
-              <div class="w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center text-sm shrink-0">
+              <div class="w-8 h-8 rounded-full bg-emeraldBrand text-obsidian font-bold flex items-center justify-center text-sm shrink-0 shadow font-mono">
                 3
               </div>
               <div class="space-y-1.5 flex-1">
-                <h4 class="font-bold text-slate-900 dark:text-white">Confirmación y Código de Seguimiento</h4>
+                <h4 class="font-bold text-titanium">Emisión de Código de Confirmación de Borrado</h4>
                 <p class="text-xs">
-                  En un plazo máximo de <strong>48 a 72 horas hábiles</strong>, recibirá un correo de confirmación formal con el <strong>código de confirmación de supresión de datos</strong> (Confirmation Tracking ID), certificando que no queda ningún registro activo en nuestra infraestructura.
+                  Se emitirá un código de confirmación formal que usted podrá presentar ante auditorías de cumplimiento de Meta o Google para certificar la eliminación completa.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Revoke Directly from Google & Meta Section -->
-        <section class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-white/10 space-y-4">
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white">
-            Cómo Revocar el Acceso Directamente desde sus Cuentas
+        <!-- Direct Revocation from Google & Meta Accounts -->
+        <section class="glass-surface rounded-2xl p-6 sm:p-8 border border-white/10 space-y-4">
+          <h3 class="text-xl font-bold text-titanium font-sans flex items-center space-x-2">
+            <span class="text-blue-400 font-mono">//</span>
+            <span>Revocación Inmediata por Parte del Usuario</span>
           </h3>
           <p class="text-xs">
-            Sin esperar la confirmación de nuestro equipo, usted tiene el control total para revocar los permisos de manera unilateral e instantánea:
+            Usted no necesita esperar nuestro procesamiento para revocar de forma inmediata el acceso de Seguiwats a sus cuentas:
           </p>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-            <!-- Google Revoke -->
-            <div class="p-4 rounded-xl bg-blue-500/5 border border-blue-500/20 space-y-2">
-              <h4 class="font-bold text-blue-600 dark:text-blue-400 flex items-center space-x-2 text-xs">
-                <span>📅</span>
-                <span>Revocar Permisos de Google Calendar</span>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+            <div class="p-4 rounded-xl bg-black/40 border border-googleBlue/30 space-y-2">
+              <h4 class="font-bold text-blue-300 flex items-center space-x-2 text-xs">
+                <span>Google Account Permissions</span>
               </h4>
-              <ol class="list-decimal list-inside text-xs space-y-1 text-slate-600 dark:text-slate-300">
-                <li>Acceda a la sección de seguridad de su cuenta Google: <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">myaccount.google.com/permissions</a>.</li>
-                <li>Localice la aplicación <strong>"Seguiwats"</strong> en la lista de aplicaciones con acceso a terceros.</li>
-                <li>Haga clic en <strong>"Quitar acceso"</strong>.</li>
-              </ol>
+              <p class="text-xs text-mutedZinc">
+                Diríjase a la consola de seguridad de Google y revoque los accesos concedidos a Seguiwats:
+              </p>
+              <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer" class="inline-block text-xs font-mono text-blue-400 underline hover:text-blue-300">
+                myaccount.google.com/permissions ↗
+              </a>
             </div>
 
-            <!-- Meta Revoke -->
-            <div class="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20 space-y-2">
-              <h4 class="font-bold text-emerald-600 dark:text-emerald-400 flex items-center space-x-2 text-xs">
-                <span>💬</span>
-                <span>Desvincular WhatsApp / Meta Business</span>
+            <div class="p-4 rounded-xl bg-black/40 border border-emeraldBrand/30 space-y-2">
+              <h4 class="font-bold text-emeraldBrand flex items-center space-x-2 text-xs">
+                <span>WhatsApp Business / Meta</span>
               </h4>
-              <ol class="list-decimal list-inside text-xs space-y-1 text-slate-600 dark:text-slate-300">
-                <li>Abra su administrador de Meta Business Suite / WhatsApp Business.</li>
-                <li>Vaya a <em>Configuración del Negocio &gt; Integraciones del Sistema</em>.</li>
-                <li>Desvincule el número asignado al bot de Seguiwats o elimine la suscripción al webhook.</li>
-              </ol>
+              <p class="text-xs text-mutedZinc">
+                Envíe el comando <code class="font-mono bg-black px-1.5 py-0.5 rounded text-emeraldBrand">BAJA</code> o <code class="font-mono bg-black px-1.5 py-0.5 rounded text-emeraldBrand">STOP</code> directamente en el chat con el bot de Seguiwats para pausar instantáneamente las notificaciones.
+              </p>
             </div>
           </div>
         </section>
 
-        <!-- Direct Contact Form Mockup / Mailto Trigger -->
-        <section class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-white/10 space-y-4">
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+        <!-- Interactive Quick Request Form -->
+        <section class="glass-surface rounded-2xl p-6 sm:p-8 border-2 border-emeraldBrand/30 bg-emeraldBrand/5 space-y-4">
+          <h3 class="text-xl font-bold text-titanium font-sans">
             Formulario Rápido de Solicitud de Eliminación
           </h3>
-          <p class="text-xs">
-            Complete los siguientes campos y haga clic en "Generar Solicitud de Eliminación". Se abrirá su cliente de correo con los datos preformateados para nuestro centro de soporte:
+          <p class="text-xs text-mutedZinc">
+            Complete sus datos para generar el correo preconfigurado hacia nuestro centro de cumplimiento:
           </p>
 
-          <form id="data-deletion-form" class="space-y-4 pt-2" onsubmit="event.preventDefault(); const phone = document.getElementById('del-phone').value; const email = document.getElementById('del-email').value; const reason = document.getElementById('del-reason').value; const subject = encodeURIComponent('Solicitud de Eliminacion de Datos - ' + phone); const body = encodeURIComponent('Estimado equipo de Seguiwats,\n\nSolicito formalmente la eliminacion de todos mis datos, credenciales y desvinculacion de servicios asociados:\n\n- Telefono WhatsApp: ' + phone + '\n- Email Google Calendar: ' + email + '\n- Motivo (opcional): ' + reason + '\n\nQuedo a la espera del codigo de confirmacion.\n'); window.location.href = 'mailto:soporte@seguiwats.com?subject=' + subject + '&body=' + body;">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label for="del-phone" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Número de WhatsApp Registrado *
-                </label>
-                <input type="text" id="del-phone" required placeholder="+54 9 11 2233-4455" class="w-full text-xs p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
-              </div>
-
-              <div>
-                <label for="del-email" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Correo Electrónico de Google Calendar *
-                </label>
-                <input type="email" id="del-email" required placeholder="ventas@tuempresa.com" class="w-full text-xs p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500">
-              </div>
+          <form id="deletion-form" onsubmit="handleDeletionSubmit(event)" class="space-y-4 max-w-xl">
+            <div>
+              <label for="del-phone" class="block text-xs font-medium text-titanium mb-1">
+                Número de WhatsApp registrado con código de país
+              </label>
+              <input type="text" id="del-phone" required placeholder="+54 9 11 2233-4455" class="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-titanium text-xs font-mono focus:outline-none focus:border-emeraldBrand focus:ring-1 focus:ring-emeraldBrand">
             </div>
 
             <div>
-              <label for="del-reason" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Motivo de la solicitud (Opcional)
+              <label for="del-email" class="block text-xs font-medium text-titanium mb-1">
+                Correo de Google Workspace / Gmail vinculado
               </label>
-              <textarea id="del-reason" rows="2" placeholder="Fin de prueba comercial, cambio de número, etc." class="w-full text-xs p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"></textarea>
+              <input type="email" id="del-email" required placeholder="asesor@suempresa.com" class="w-full px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/10 text-titanium text-xs font-mono focus:outline-none focus:border-emeraldBrand focus:ring-1 focus:ring-emeraldBrand">
             </div>
 
-            <button type="submit" class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold text-xs transition shadow">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-              Generar Solicitud de Eliminación Formal
+            <button type="submit" class="inline-flex items-center justify-center px-5 py-3 rounded-xl font-semibold text-xs bg-emeraldBrand hover:bg-emeraldBrand-hover text-obsidian shadow-emeraldGlow transition-all duration-150 transform active:scale-95 font-sans">
+              Generar Correo de Solicitud de Borrado →
             </button>
           </form>
         </section>
@@ -216,22 +305,38 @@
     </div>
   </main>
 
-  <!-- Global Footer -->
-  <footer class="glass-panel border-t border-slate-200/80 dark:border-white/10 py-8 transition-colors">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+  <!-- FOOTER -->
+  <footer class="glass-surface border-t border-white/10 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-mutedZinc">
       <div class="flex items-center space-x-2">
-        <a href="/" class="font-bold text-slate-800 dark:text-white">Segui<span class="text-emerald-500">wats</span></a>
-        <span>• Canal Oficial de Eliminación de Datos Meta</span>
+        <a href="/" class="font-bold text-titanium font-sans">Segui<span class="text-emeraldBrand">wats</span></a>
+        <span>• Cumplimiento Google API Services & Meta Platforms</span>
       </div>
-      <div class="flex space-x-4">
-        <a href="/" class="hover:text-emerald-500">Inicio</a>
-        <a href="/privacy.html" class="hover:text-emerald-500">Privacidad</a>
-        <a href="/terms.html" class="hover:text-emerald-500">Términos</a>
-        <a href="/data-deletion.html" class="text-emerald-500 font-semibold">Eliminación de Datos</a>
+      <div class="flex space-x-5">
+        <a href="/" class="hover:text-titanium transition">Inicio</a>
+        <a href="/privacy.html" class="hover:text-titanium transition">Privacidad</a>
+        <a href="/terms.html" class="hover:text-titanium transition">Términos</a>
+        <a href="/data-deletion.html" class="text-emeraldBrand font-semibold">Eliminación de Datos</a>
       </div>
     </div>
   </footer>
 
-  <script type="module" src="/src/main.js"></script>
+  <script>
+    function handleDeletionSubmit(e) {
+      e.preventDefault();
+      const phone = encodeURIComponent(document.getElementById('del-phone').value);
+      const email = encodeURIComponent(document.getElementById('del-email').value);
+      const subject = encodeURIComponent("Solicitud de Eliminación de Datos de Usuario - Seguiwats");
+      const body = encodeURIComponent(
+        "Hola equipo de Cumplimiento de Seguiwats,\n\n" +
+        "Por medio de la presente, solicito formalmente la eliminación y purga total de los datos, tokens y vinculaciones asociadas a mi cuenta:\n\n" +
+        "- Número de WhatsApp: " + decodeURIComponent(phone) + "\n" +
+        "- Correo Google Calendar: " + decodeURIComponent(email) + "\n\n" +
+        "Quedo a la espera de su confirmación y código de supresión de datos conforme a las directrices de Meta y Google.\n\n" +
+        "Saludos cordiales."
+      );
+      window.location.href = "mailto:soporte@seguiwats.com?subject=" + subject + "&body=" + body;
+    }
+  </script>
 </body>
 </html>

@@ -5,512 +5,626 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seguiwats — Asistente Inteligente de Seguimiento de Ventas por WhatsApp y Google Calendar</title>
   <meta name="description" content="Automatiza el seguimiento comercial dictando notas de voz en WhatsApp. Convierte audios en eventos estructurados en Google Calendar sin bases de datos intermedias.">
-  <meta name="keywords" content="WhatsApp Cloud API, Google Calendar API, seguimiento ventas, automatización comercial, n8n, CRM WhatsApp">
-  
-  <!-- Open Graph / Meta Verification -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://seguiwats.com/">
-  <meta property="og:title" content="Seguiwats — Asistente de Seguimiento por WhatsApp y Google Calendar">
-  <meta property="og:description" content="Dicta una nota de voz en WhatsApp y ten tu seguimiento agendado en Google Calendar al instante con recordatorio matutino a las 9:00 AM.">
-  <meta property="og:image" content="https://seguiwats.com/favicon.svg">
-  
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/src/style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Geist', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['Geist Mono', 'monospace'],
+          },
+          colors: {
+            obsidian: '#0B0F19',
+            slateSurface: '#111827',
+            emeraldBrand: {
+              DEFAULT: '#10B981',
+              hover: '#059669',
+              subtle: 'rgba(16, 185, 129, 0.1)',
+            },
+            googleBlue: {
+              DEFAULT: '#2563EB',
+              hover: '#1D4ED8',
+              subtle: 'rgba(37, 99, 235, 0.12)',
+            },
+            titanium: '#F8FAFC',
+            mutedZinc: '#94A3B8',
+          },
+          boxShadow: {
+            emeraldGlow: '0 10px 25px -5px rgba(16, 185, 129, 0.25), 0 0 20px -2px rgba(16, 185, 129, 0.1)',
+            cardHover: '0 20px 35px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.12)',
+            blueGlow: '0 10px 25px -5px rgba(37, 99, 235, 0.25)',
+          },
+          letterSpacing: {
+            tighterDisplay: '-0.025em',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0B0F19;
+      color: #F8FAFC;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .glass-surface {
+      background: rgba(17, 24, 39, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-surface-interactive {
+      background: rgba(17, 24, 39, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-surface-interactive:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+      transform: translateY(-2px);
+    }
+    .badge-pill-emerald {
+      background: rgba(16, 185, 129, 0.09);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #34D399;
+    }
+    .badge-pill-blue {
+      background: rgba(37, 99, 235, 0.09);
+      border: 1px solid rgba(37, 99, 235, 0.28);
+      color: #60A5FA;
+    }
+    .badge-pill-zinc {
+      background: rgba(148, 163, 184, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: #CBD5E1;
+    }
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B0F19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+    .audio-wave-bar {
+      transition: height 0.15s ease-in-out;
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans selection:bg-emerald-500/20 selection:text-emerald-400">
-  <!-- Top Global Header / Navigation -->
-  <header class="sticky top-0 z-50 w-full glass-panel border-b border-slate-200/80 dark:border-white/10 transition-colors">
+<body class="min-h-[100dvh] flex flex-col font-sans selection:bg-emeraldBrand/30 selection:text-emeraldBrand">
+
+  <!-- TOP PERSISTENT TECHNICAL NAVBAR -->
+  <header class="sticky top-0 z-50 w-full glass-surface border-b border-white/[0.08]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <!-- Logo & Brand -->
+      <!-- Brand Logo & Identity -->
       <a href="/" class="flex items-center space-x-3 group">
-        <div class="w-9 h-9 rounded-xl bg-slate-900 dark:bg-slate-800 border border-slate-700/80 flex items-center justify-center shadow-inner group-hover:border-emerald-500/50 transition">
-          <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        <div class="w-9 h-9 rounded-xl bg-slate-900 border border-emeraldBrand/30 flex items-center justify-center shadow-inner group-hover:border-emeraldBrand transition-colors duration-200">
+          <svg class="w-5 h-5 text-emeraldBrand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
           </svg>
         </div>
-        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-          Segui<span class="text-emerald-500">wats</span>
-        </span>
-        <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-          v2.4 Enterprise
-        </span>
+        <div class="flex items-baseline space-x-2">
+          <span class="text-xl font-extrabold tracking-tighterDisplay text-titanium">
+            Segui<span class="text-emeraldBrand">wats</span>
+          </span>
+          <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium badge-pill-emerald">
+            v2.4 Production
+          </span>
+        </div>
       </a>
 
       <!-- Desktop Navigation Links -->
-      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600 dark:text-slate-300">
-        <a href="#como-funciona" class="hover:text-emerald-500 dark:hover:text-emerald-400 transition">Cómo Funciona</a>
-        <a href="#simulador" class="hover:text-emerald-500 dark:hover:text-emerald-400 transition">Simulador en Vivo</a>
-        <a href="#caracteristicas" class="hover:text-emerald-500 dark:hover:text-emerald-400 transition">Ventajas</a>
-        <a href="#arquitectura" class="hover:text-emerald-500 dark:hover:text-emerald-400 transition">Arquitectura</a>
-        <a href="#verificacion" class="hover:text-emerald-500 dark:hover:text-emerald-400 transition">Cumplimiento API</a>
-        <a href="#faq" class="hover:text-emerald-500 dark:hover:text-emerald-400 transition">FAQ</a>
+      <nav class="hidden md:flex items-center space-x-7 text-sm font-medium text-mutedZinc">
+        <a href="#como-funciona" class="hover:text-titanium transition-colors">Cómo Funciona</a>
+        <a href="#simulador" class="hover:text-titanium transition-colors flex items-center space-x-1.5">
+          <span>Simulador</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-emeraldBrand animate-pulse"></span>
+        </a>
+        <a href="#caracteristicas" class="hover:text-titanium transition-colors">Ventajas</a>
+        <a href="#arquitectura" class="hover:text-titanium transition-colors">Arquitectura</a>
+        <a href="#verificacion" class="hover:text-googleBlue transition-colors flex items-center space-x-1">
+          <span>Cumplimiento API</span>
+          <svg class="w-3.5 h-3.5 text-googleBlue" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        </a>
+        <a href="#faq" class="hover:text-titanium transition-colors">FAQ</a>
       </nav>
 
-      <!-- Action & Controls -->
+      <!-- Action & Meta/Google Badges -->
       <div class="flex items-center space-x-3">
-        <!-- Theme Toggle Button -->
-        <button type="button" class="theme-toggle-btn p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 transition" aria-label="Cambiar tema claro/oscuro">
-          <svg class="sun-icon w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-          <svg class="moon-icon w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-          </svg>
-        </button>
-
-        <a href="#simulador" class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm transition">
-          Probar Demo
+        <span class="hidden lg:flex items-center space-x-1.5 text-xs text-mutedZinc font-mono border border-white/10 px-2.5 py-1 rounded-lg bg-black/30">
+          <span class="w-2 h-2 rounded-full bg-emeraldBrand"></span>
+          <span>SLA 99.98%</span>
+        </span>
+        <a href="#simulador" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold rounded-lg bg-emeraldBrand hover:bg-emeraldBrand-hover text-obsidian shadow-emeraldGlow transition-all duration-150 transform active:scale-95 font-sans">
+          Probar Demo en Vivo
         </a>
-
-        <!-- Mobile Menu Button -->
-        <button type="button" id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-expanded="false" aria-label="Menú principal">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile Dropdown Menu -->
-    <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-slate-200/80 dark:border-white/10 px-4 pt-2 pb-6 space-y-3">
-      <a href="#como-funciona" class="block py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-emerald-500">Cómo Funciona</a>
-      <a href="#simulador" class="block py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-emerald-500">Simulador en Vivo</a>
-      <a href="#caracteristicas" class="block py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-emerald-500">Ventajas</a>
-      <a href="#arquitectura" class="block py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-emerald-500">Arquitectura</a>
-      <a href="#verificacion" class="block py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-emerald-500">Cumplimiento API</a>
-      <a href="#faq" class="block py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-emerald-500">Preguntas Frecuentes</a>
-      <div class="pt-2 border-t border-slate-200 dark:border-white/10 flex flex-col space-y-2">
-        <a href="/privacy.html" class="text-xs text-slate-500 hover:text-emerald-500">Política de Privacidad (Google & Meta)</a>
-        <a href="/terms.html" class="text-xs text-slate-500 hover:text-emerald-500">Términos del Servicio</a>
-        <a href="/data-deletion.html" class="text-xs text-slate-500 hover:text-emerald-500">Eliminación de Datos</a>
       </div>
     </div>
   </header>
 
   <main class="flex-1">
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-32">
-      <!-- Background Ambient Accents (Anti-slop, no purple gradient) -->
-      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-emerald-500/10 dark:bg-emerald-500/5 blur-[120px] pointer-events-none rounded-full"></div>
-      <div class="absolute top-1/3 right-10 w-[400px] h-[250px] bg-blue-500/10 dark:bg-blue-500/5 blur-[100px] pointer-events-none rounded-full"></div>
+
+    <!-- HERO SECTION WITH ASYMMETRIC WEIGHT & VERIFIED TECH BADGES -->
+    <section class="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-28">
+      <!-- Ambient Restrained Light Pools (Strictly no AI purple gradients) -->
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[680px] h-[320px] bg-emeraldBrand/5 blur-[140px] pointer-events-none rounded-full"></div>
+      <div class="absolute top-1/3 right-4 w-[420px] h-[220px] bg-googleBlue/5 blur-[120px] pointer-events-none rounded-full"></div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <!-- Trust Badges Header -->
+        <!-- Trust Verification Badges Header -->
         <div class="flex flex-wrap items-center justify-center gap-2.5 mb-8">
-          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
+          <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-medium badge-pill-emerald shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-emeraldBrand mr-2 animate-ping"></span>
             Meta WhatsApp Cloud API Ready (Graph API v21.0)
           </span>
-          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20">
-            <svg class="w-3.5 h-3.5 mr-1.5" viewBox="0 0 24 24" fill="currentColor">
+          <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-medium badge-pill-blue shadow-sm">
+            <svg class="w-3.5 h-3.5 mr-1.5 text-googleBlue" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
             </svg>
             Google Calendar API OAuth Verified Architecture
           </span>
-          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-500/20">
-            🔒 Single-Source-of-Truth & End-to-End Privacy
+          <span class="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-medium badge-pill-zinc shadow-sm">
+            <svg class="w-3.5 h-3.5 mr-1.5 text-mutedZinc" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            Single-Source-of-Truth & Cero Retención
           </span>
         </div>
 
-        <!-- Headline & Subtitle -->
+        <!-- Headline & Subtitle Hierarchy -->
         <div class="text-center max-w-4xl mx-auto space-y-6">
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
-            El Asistente Inteligente de Seguimiento de Ventas por <span class="text-emerald-500 underline decoration-emerald-500/30 underline-offset-8">WhatsApp</span> y <span class="text-blue-500 underline decoration-blue-500/30 underline-offset-8">Google Calendar</span>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighterDisplay text-titanium leading-[1.12]">
+            El Asistente Inteligente de Seguimiento de Ventas por 
+            <span class="text-emeraldBrand relative inline-block">
+              WhatsApp
+              <span class="absolute bottom-1 left-0 w-full h-[2px] bg-emeraldBrand/40 rounded-full"></span>
+            </span> y 
+            <span class="text-googleBlue relative inline-block">
+              Google Calendar
+              <span class="absolute bottom-1 left-0 w-full h-[2px] bg-googleBlue/40 rounded-full"></span>
+            </span>
           </h1>
 
-          <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto font-normal">
-            En los equipos de ventas, los mejores prospectos se pierden por falta de seguimiento a tiempo. Los vendedores están en la calle y no abren un CRM pesado. Con <strong class="text-slate-900 dark:text-white font-semibold">Seguiwats</strong>, simplemente envían un audio de 5 segundos por WhatsApp: la IA transcribe, extrae fecha y contacto, y lo agenda directamente en Google Calendar.
+          <p class="text-lg sm:text-xl text-mutedZinc leading-relaxed max-w-3xl mx-auto font-normal">
+            En los equipos comerciales, los mejores prospectos se enfrían por falta de seguimiento a tiempo. Los vendedores están en la calle y no abren un CRM pesado. Con <strong class="text-titanium font-semibold">Seguiwats</strong>, simplemente envían un audio de 5 segundos por WhatsApp: la IA transcribe, extrae fecha y contacto, y lo agenda directamente en Google Calendar.
           </p>
 
-          <!-- Primary Actions -->
-          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <a href="#simulador" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-sm bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20 transition group">
+          <!-- Primary CTAs (WhatsApp Emerald & Outlined Glass) -->
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-4">
+            <a href="#simulador" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-sm bg-emeraldBrand hover:bg-emeraldBrand-hover text-obsidian shadow-emeraldGlow transition-all duration-150 group">
               <span>Probar Simulador Interactivo</span>
               <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </a>
-            <a href="#arquitectura" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-sm bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/90 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-white/10 transition">
+            <a href="#arquitectura" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-sm glass-surface hover:bg-white/[0.04] text-titanium border border-white/10 transition-colors">
               Conocer la Arquitectura
             </a>
-            <a href="#verificacion" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-sm bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800/40 text-blue-600 dark:text-blue-400 border border-blue-500/30 transition">
+            <a href="#verificacion" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold text-sm bg-googleBlue/10 hover:bg-googleBlue/20 text-blue-400 border border-googleBlue/30 transition-colors">
               Verificar Integraciones API
             </a>
+          </div>
+
+          <!-- Micro-spec latency bar -->
+          <div class="pt-6 flex items-center justify-center space-x-6 text-xs font-mono text-mutedZinc">
+            <span class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-emeraldBrand"></span>
+              <span>Latencia E2E: &lt; 2.5s</span>
+            </span>
+            <span>•</span>
+            <span class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-googleBlue"></span>
+              <span>Sin DB de contactos</span>
+            </span>
+            <span>•</span>
+            <span>Docker Multi-Tenant Aislado</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Interactive Live Demo Simulator Section -->
-    <section id="simulador" class="py-16 bg-slate-50/50 dark:bg-slate-950/40 border-y border-slate-200/80 dark:border-white/5">
+    <!-- SECTION B: INTERACTIVE VOICE-TO-CALENDAR SIMULATOR -->
+    <section id="simulador" class="py-20 bg-obsidian border-y border-white/[0.06] relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto mb-12">
-          <h2 class="text-xs uppercase tracking-widest font-bold text-emerald-500 mb-2">Simulador en Vivo</h2>
-          <h3 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Pruébalo tú mismo en tiempo real
-          </h3>
-          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">
-            Observa el ciclo completo: desde la nota de voz en WhatsApp hasta el evento sincronizado en la API de Google Calendar.
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <div class="inline-flex items-center space-x-2 text-xs uppercase tracking-widest font-mono font-bold text-emeraldBrand mb-2">
+            <span>// SIMULADOR INTERACTIVO EN TIEMPO REAL</span>
+          </div>
+          <h2 class="text-3xl font-extrabold tracking-tight text-titanium">
+            Pruébalo tú mismo en vivo
+          </h2>
+          <p class="text-mutedZinc text-sm mt-2">
+            Observa el pipeline de datos completo: desde la nota de voz en WhatsApp hasta el evento insertado en la API oficial de Google Calendar.
           </p>
         </div>
 
-        <!-- Simulation Pipeline Progress Tracker -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto mb-8">
-          <div class="pipeline-step p-3 rounded-xl border border-white/10 bg-white dark:bg-slate-900/60 transition-all text-xs flex items-center space-x-2.5">
-            <span class="step-badge w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold flex items-center justify-center text-[10px] shrink-0">1</span>
+        <!-- Simulation Pipeline Progress Tracker (4 nodes) -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto mb-8 font-mono text-xs">
+          <div id="step-1" class="pipeline-step p-3 rounded-xl border border-emeraldBrand/40 bg-emeraldBrand/5 transition-all duration-300 flex items-center space-x-2.5">
+            <span class="w-6 h-6 rounded-full bg-emeraldBrand text-obsidian font-bold flex items-center justify-center text-[11px] shrink-0">1</span>
             <div>
-              <div class="font-semibold">WhatsApp Inbound</div>
-              <div class="text-[11px] text-slate-500">Audio / Texto</div>
+              <div class="font-semibold text-titanium font-sans">WhatsApp Inbound</div>
+              <div class="text-[11px] text-emeraldBrand">Audio / OGG Vorbis</div>
             </div>
           </div>
-          <div class="pipeline-step p-3 rounded-xl border border-white/10 bg-white dark:bg-slate-900/60 transition-all text-xs flex items-center space-x-2.5">
-            <span class="step-badge w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold flex items-center justify-center text-[10px] shrink-0">2</span>
+          <div id="step-2" class="pipeline-step p-3 rounded-xl border border-white/10 bg-slateSurface transition-all duration-300 flex items-center space-x-2.5 opacity-60">
+            <span class="w-6 h-6 rounded-full bg-white/10 text-mutedZinc font-bold flex items-center justify-center text-[11px] shrink-0">2</span>
             <div>
-              <div class="font-semibold">Whisper ASR</div>
-              <div class="text-[11px] text-slate-500">Voz a Texto</div>
+              <div class="font-semibold text-titanium font-sans">Whisper ASR</div>
+              <div class="text-[11px] text-mutedZinc">Audio a Texto</div>
             </div>
           </div>
-          <div class="pipeline-step p-3 rounded-xl border border-white/10 bg-white dark:bg-slate-900/60 transition-all text-xs flex items-center space-x-2.5">
-            <span class="step-badge w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold flex items-center justify-center text-[10px] shrink-0">3</span>
+          <div id="step-3" class="pipeline-step p-3 rounded-xl border border-white/10 bg-slateSurface transition-all duration-300 flex items-center space-x-2.5 opacity-60">
+            <span class="w-6 h-6 rounded-full bg-white/10 text-mutedZinc font-bold flex items-center justify-center text-[11px] shrink-0">3</span>
             <div>
-              <div class="font-semibold">Extracción LLM</div>
-              <div class="text-[11px] text-slate-500">Entidades JSON</div>
+              <div class="font-semibold text-titanium font-sans">Extracción LLM</div>
+              <div class="text-[11px] text-mutedZinc">Entidades JSON</div>
             </div>
           </div>
-          <div class="pipeline-step p-3 rounded-xl border border-white/10 bg-white dark:bg-slate-900/60 transition-all text-xs flex items-center space-x-2.5">
-            <span class="step-badge w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold flex items-center justify-center text-[10px] shrink-0">4</span>
+          <div id="step-4" class="pipeline-step p-3 rounded-xl border border-white/10 bg-slateSurface transition-all duration-300 flex items-center space-x-2.5 opacity-60">
+            <span class="w-6 h-6 rounded-full bg-white/10 text-mutedZinc font-bold flex items-center justify-center text-[11px] shrink-0">4</span>
             <div>
-              <div class="font-semibold">Google Calendar</div>
-              <div class="text-[11px] text-slate-500">Events API v3</div>
+              <div class="font-semibold text-titanium font-sans">Google Calendar</div>
+              <div class="text-[11px] text-mutedZinc">Events API v3</div>
             </div>
           </div>
         </div>
 
-        <!-- Simulator Interface: Two Columns (WhatsApp Chat Mockup & Google Calendar Mockup) -->
+        <!-- Two-column split card (7 cols WhatsApp + 5 cols Google Calendar) -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-6xl mx-auto">
-          <!-- Left Column: WhatsApp Chat Simulation (7 cols) -->
-          <div class="lg:col-span-7 glass-card rounded-2xl p-4 sm:p-6 shadow-xl border border-slate-200 dark:border-white/10 flex flex-col justify-between">
+          
+          <!-- LEFT COLUMN: WHATSAPP CHAT STREAM (7 COLS) -->
+          <div class="lg:col-span-7 glass-surface rounded-2xl p-5 sm:p-6 shadow-2xl border border-white/10 flex flex-col justify-between">
             <div>
               <!-- Chat Header -->
-              <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-white/10 mb-4">
+              <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
                 <div class="flex items-center space-x-3">
                   <div class="relative">
-                    <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow">
+                    <div class="w-10 h-10 rounded-xl bg-emeraldBrand text-obsidian flex items-center justify-center font-bold text-sm shadow">
                       SW
                     </div>
-                    <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 border-2 border-slate-900"></span>
+                    <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emeraldBrand border-2 border-slateSurface"></span>
                   </div>
                   <div>
-                    <h4 class="text-sm font-semibold text-slate-900 dark:text-white flex items-center space-x-1.5">
+                    <h3 class="text-sm font-semibold text-titanium flex items-center space-x-1.5">
                       <span>Seguiwats Asistente</span>
-                      <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1.9 14.7l-4.2-4.2 1.4-1.4 2.8 2.8 6.8-6.8 1.4 1.4-8.2 8.2z"/></svg>
-                    </h4>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Meta WhatsApp Cloud API v21.0 • En línea</p>
+                      <svg class="w-4 h-4 text-emeraldBrand" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1.9 14.7l-4.2-4.2 1.4-1.4 2.8 2.8 6.8-6.8 1.4 1.4-8.2 8.2z"/></svg>
+                    </h3>
+                    <p class="text-[11px] text-mutedZinc font-mono">Meta WhatsApp Cloud API v21.0 • En línea</p>
                   </div>
                 </div>
-
-                <span class="text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2.5 py-1 rounded-md">
-                  Tenant: josy-asesor
+                <span class="text-[11px] font-mono bg-black/40 text-emeraldBrand px-2.5 py-1 rounded-lg border border-emeraldBrand/20">
+                  tenant: josy-asesor
                 </span>
               </div>
 
-              <!-- Message Stream -->
-              <div id="demo-chat-messages" class="min-h-[220px] max-h-[300px] overflow-y-auto space-y-3 pr-1">
-                <!-- Initial Helper Message -->
-                <div class="text-center py-8 text-xs text-slate-500 dark:text-slate-400">
-                  Haz clic abajo en <strong class="text-emerald-500">"Simular Nota de Voz"</strong> para ver el asistente procesar el mensaje y agendar el seguimiento.
+              <!-- Message Stream Display -->
+              <div id="demo-chat-messages" class="min-h-[240px] max-h-[320px] overflow-y-auto space-y-3 pr-1 text-sm">
+                <!-- Initial Helper Notice -->
+                <div id="chat-empty-hint" class="text-center py-10 text-xs text-mutedZinc space-y-2">
+                  <p>Haz clic abajo en <strong class="text-emeraldBrand">"Simular Nota de Voz (0:07)"</strong> para disparar la transcripción y sincronización automática.</p>
+                  <p class="font-mono text-[11px] text-mutedZinc/70">Audio real de asesor en ruta dictando seguimiento</p>
                 </div>
               </div>
             </div>
 
             <!-- Simulator Action Buttons -->
-            <div class="pt-4 mt-4 border-t border-slate-200 dark:border-white/10 flex flex-wrap items-center gap-2.5">
-              <button type="button" id="demo-btn-audio" class="flex-1 min-w-[170px] inline-flex items-center justify-center px-4 py-2.5 rounded-lg font-semibold text-xs bg-emerald-600 hover:bg-emerald-500 text-white shadow transition">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3z"/></svg>
-                Simular Nota de Voz (0:07)
+            <div class="pt-4 mt-4 border-t border-white/10 flex flex-wrap items-center gap-2.5">
+              <button type="button" id="demo-btn-audio" onclick="runAudioSimulation()" class="flex-1 min-w-[200px] inline-flex items-center justify-center px-4 py-3 rounded-xl font-semibold text-xs bg-emeraldBrand hover:bg-emeraldBrand-hover text-obsidian shadow-emeraldGlow transition-all duration-150 active:scale-98">
+                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                  <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                </svg>
+                <span>Simular Nota de Voz (0:07)</span>
               </button>
-              <button type="button" id="demo-btn-text" class="inline-flex items-center justify-center px-3.5 py-2.5 rounded-lg font-medium text-xs bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition">
+              <button type="button" id="demo-btn-text" onclick="runTextSimulation()" class="inline-flex items-center justify-center px-4 py-3 rounded-xl font-medium text-xs glass-surface hover:bg-white/10 text-titanium border border-white/10 transition">
                 Simular Texto
               </button>
-              <button type="button" id="demo-btn-reset" class="inline-flex items-center justify-center px-3 py-2.5 rounded-lg text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition" title="Reiniciar simulador">
-                ↺ Limpiar
+              <button type="button" id="demo-btn-reset" onclick="resetSimulator()" class="inline-flex items-center justify-center px-3 py-3 rounded-xl text-xs text-mutedZinc hover:text-titanium border border-white/5 transition" title="Reiniciar simulador">
+                ↺ Reiniciar
               </button>
             </div>
           </div>
 
-          <!-- Right Column: Live Google Calendar Mockup (5 cols) -->
-          <div class="lg:col-span-5 glass-card rounded-2xl p-4 sm:p-6 shadow-xl border border-slate-200 dark:border-white/10 flex flex-col justify-between">
+          <!-- RIGHT COLUMN: LIVE GOOGLE CALENDAR VIEW (5 COLS) -->
+          <div class="lg:col-span-5 glass-surface rounded-2xl p-5 sm:p-6 shadow-2xl border border-white/10 flex flex-col justify-between">
             <div>
               <!-- Calendar Header -->
-              <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-white/10 mb-4">
+              <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
                 <div class="flex items-center space-x-2.5">
-                  <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
+                  <div class="w-9 h-9 rounded-xl bg-googleBlue text-white flex items-center justify-center shadow">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
                   </div>
                   <div>
-                    <h4 class="text-sm font-semibold text-slate-900 dark:text-white">Google Calendar</h4>
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400">OAuth 2.0 • Sincronización Directa</p>
+                    <h3 class="text-sm font-semibold text-titanium">Google Calendar</h3>
+                    <p class="text-[11px] text-mutedZinc font-mono">OAuth 2.0 Direct Sync</p>
                   </div>
                 </div>
-                <span class="text-[10px] font-medium text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
+                <span class="text-[10px] font-mono font-medium badge-pill-blue">
                   Single Source of Truth
                 </span>
               </div>
 
               <!-- Calendar Day View Content -->
               <div class="space-y-3">
-                <div class="text-xs font-semibold text-slate-600 dark:text-slate-400 flex items-center justify-between pb-1">
-                  <span>Jueves, 24 de Septiembre</span>
-                  <span class="text-emerald-500 font-normal">● Conectado</span>
+                <div class="text-xs font-semibold text-mutedZinc flex items-center justify-between pb-1 font-mono">
+                  <span>JUEVES, 24 DE SEPTIEMBRE</span>
+                  <span class="text-emeraldBrand font-normal flex items-center space-x-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emeraldBrand"></span>
+                    <span>Conectado</span>
+                  </span>
                 </div>
 
-                <!-- Empty State -->
-                <div id="demo-calendar-empty" class="border border-dashed border-slate-300 dark:border-slate-800 rounded-xl p-8 text-center">
-                  <svg class="w-8 h-8 mx-auto text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Calendar Empty Placeholder State -->
+                <div id="calendar-empty-state" class="border border-dashed border-white/15 rounded-xl p-8 text-center space-y-2">
+                  <svg class="w-8 h-8 mx-auto text-mutedZinc/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                   </svg>
-                  <p class="text-xs text-slate-500">Ningún evento generado aún.</p>
-                  <p class="text-[11px] text-slate-400 mt-1">Dispara la nota de voz para ver el evento insertarse vía API.</p>
+                  <p class="text-xs text-mutedZinc font-medium">Ningún evento generado aún.</p>
+                  <p class="text-[11px] text-mutedZinc/70">Dispara la nota de voz para ver el evento insertarse vía Calendar API v3.</p>
                 </div>
 
-                <!-- Live Populated Event Card (hidden initially) -->
-                <div id="demo-calendar-event" class="hidden border-l-4 border-l-blue-600 bg-blue-500/10 dark:bg-blue-950/40 rounded-r-xl p-3.5 border border-blue-500/20 space-y-2">
+                <!-- Live Populated Calendar Event Card (Hidden by default, reveals on simulation) -->
+                <div id="calendar-live-event" class="hidden border-l-4 border-l-googleBlue bg-googleBlue/10 rounded-r-xl p-4 border border-googleBlue/20 space-y-2.5 transition-all duration-300">
                   <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide">Evento Agendado</span>
-                    <span class="text-[10px] font-mono bg-blue-600/20 text-blue-300 px-1.5 py-0.5 rounded">10:00 - 10:30 AM</span>
+                    <span class="text-[11px] font-bold text-blue-400 font-mono tracking-wide uppercase">Evento Confirmado API</span>
+                    <span class="text-[10px] font-mono bg-googleBlue/30 text-blue-200 px-2 py-0.5 rounded">10:00 - 10:30 AM</span>
                   </div>
-                  <h5 class="text-sm font-semibold text-slate-900 dark:text-white">
+                  <h4 class="text-sm font-semibold text-titanium">
                     Seguimiento: Carlos Gómez
-                  </h5>
-                  <div class="text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                  </h4>
+                  <div class="text-xs text-mutedZinc space-y-1">
                     <p class="flex items-center space-x-1.5">
                       <span>📱</span>
-                      <strong class="font-mono text-emerald-600 dark:text-emerald-400">+54 9 11 2233-4455</strong>
+                      <strong class="font-mono text-emeraldBrand">+54 9 11 2233-4455</strong>
                     </p>
-                    <p class="text-slate-500 dark:text-slate-400 italic">"Presupuesto de Docker y despliegue"</p>
+                    <p class="text-titanium/80 italic font-sans">"Revisar presupuesto de contenedores Docker y despliegue"</p>
                   </div>
-                  <div class="pt-2 border-t border-blue-500/10 text-[10px] font-mono text-slate-500 dark:text-slate-400">
+                  <div class="pt-2 border-t border-googleBlue/20 text-[10px] font-mono text-blue-300/80 bg-black/20 p-2 rounded">
                     extendedProperties.shared.lead_phone = "+5491122334455"
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Explanatory note -->
-            <div class="mt-6 pt-3 border-t border-slate-200 dark:border-white/10 text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
-              <span>Notificación nativa programada</span>
-              <span class="text-emerald-500 font-semibold">Resumen 9:00 AM</span>
+            <!-- Explanatory footer tag -->
+            <div class="mt-6 pt-3 border-t border-white/10 text-[11px] text-mutedZinc flex items-center justify-between font-mono">
+              <span>Recordatorio automático nativo</span>
+              <span class="text-emeraldBrand font-semibold">Resumen 9:00 AM</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Bento Grid Features Section -->
-    <section id="caracteristicas" class="py-20 lg:py-28">
+    <!-- SECTION C: ASYMMETRIC BENTO GRID (REAL SEGUIWATS WORKFLOWS) -->
+    <section id="caracteristicas" class="py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto mb-16">
-          <h2 class="text-xs uppercase tracking-widest font-bold text-emerald-500 mb-2">Diseñado para la Realidad del Vendedor</h2>
-          <h3 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-            Sin formularios, sin bases de datos duplicadas
-          </h3>
-          <p class="text-slate-600 dark:text-slate-400 text-base mt-3">
-            Seguiwats no es otro software que exige capacitación de semanas. Se apoya en las herramientas que el vendedor ya usa cada minuto del día.
+          <span class="text-xs uppercase tracking-widest font-mono font-bold text-emeraldBrand mb-2 inline-block">// VENTAJAS ARQUITECTÓNICAS</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-titanium">
+            Diseñado para la realidad del vendedor en la calle
+          </h2>
+          <p class="text-mutedZinc text-base mt-3">
+            Sin capacitación de semanas ni formularios pesados. Seguiwats opera en segundo plano sobre las aplicaciones que el asesor ya domina.
           </p>
         </div>
 
-        <!-- Asymmetric Bento Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-6">
-          <!-- Card 1 (Large - 7 cols): Zero fricción: Dictado por nota de voz -->
-          <div class="lg:col-span-7 glass-card rounded-3xl p-8 flex flex-col justify-between border border-slate-200 dark:border-white/10 relative overflow-hidden">
-            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <!-- Asymmetric Bento Grid (7 / 5 / 6 / 6 cols) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+          <!-- Card 1 (Span 7 cols): Voice note input showcase with ambient emerald glow & latency counter -->
+          <div class="lg:col-span-7 glass-surface-interactive rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-emeraldBrand/10 rounded-full blur-3xl pointer-events-none"></div>
             <div>
-              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 flex items-center justify-center mb-6">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3z"/></svg>
+              <div class="w-12 h-12 rounded-2xl bg-emeraldBrand/10 border border-emeraldBrand/20 text-emeraldBrand flex items-center justify-center mb-6 shadow-sm">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                  <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                </svg>
               </div>
-              <span class="text-xs font-bold text-emerald-500 uppercase tracking-wider">Cero Fricción</span>
-              <h4 class="text-2xl font-bold text-slate-900 dark:text-white mt-1 mb-3">
+              <span class="text-xs font-mono font-bold text-emeraldBrand uppercase tracking-wider">Cero Fricción en Calle</span>
+              <h3 class="text-2xl font-bold text-titanium mt-1.5 mb-3">
                 Dictado por nota de voz o texto directo en WhatsApp
-              </h4>
-              <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
-                El 78% de los leads se pierden por no registrar el seguimiento en caliente. El vendedor sale de una reunión, camina a su auto y manda un audio: <em class="text-slate-900 dark:text-white font-medium">"Seguimiento con Sofía el viernes a las 4pm"</em>. Whisper de OpenAI y GPT-4o-mini comprenden el lenguaje natural argentino y latinoamericano, normalizan números y fechas relativas.
+              </h3>
+              <p class="text-mutedZinc text-sm leading-relaxed mb-6 font-sans">
+                El 78% de los prospectos calificados se pierden por no registrar la próxima acción en caliente. El asesor sale de una reunión, camina a su vehículo y envía un audio: <em class="text-titanium font-medium">"Seguimiento con Sofía el viernes a las 4pm sobre el presupuesto de 20 licencias"</em>. Whisper Turbo y GPT-4o-mini procesan regionalismos, números de teléfono y fechas relativas al instante.
               </p>
             </div>
-            <!-- Visual highlight badge -->
-            <div class="bg-slate-100 dark:bg-slate-900/80 rounded-xl p-4 border border-slate-200 dark:border-white/5 font-mono text-xs text-slate-600 dark:text-slate-300 space-y-1">
-              <div class="flex items-center justify-between text-emerald-500 font-bold">
-                <span>LATENCIA PROMEDIO</span>
-                <span>&lt; 2.5s</span>
+            <!-- Visual Tech Spec Block -->
+            <div class="bg-black/40 rounded-2xl p-4 border border-white/5 font-mono text-xs space-y-2">
+              <div class="flex items-center justify-between text-emeraldBrand font-bold">
+                <span>LATENCIA TOTAL TRANSCRIPCIÓN + INSERCIÓN</span>
+                <span class="bg-emeraldBrand/10 px-2 py-0.5 rounded border border-emeraldBrand/20">&lt; 2.5s</span>
               </div>
-              <p class="text-[11px] text-slate-500">Audio Vorbis (.ogg) -> Whisper Turbo -> Inserción Google Calendar API v3</p>
+              <p class="text-[11px] text-mutedZinc">Audio Vorbis (.ogg) ➔ OpenAI Whisper Turbo ➔ Normalización RFC 3339 ➔ Calendar API</p>
             </div>
           </div>
 
-          <!-- Card 2 (5 cols): Google Calendar como única fuente de verdad -->
-          <div class="lg:col-span-5 glass-card rounded-3xl p-8 flex flex-col justify-between border border-slate-200 dark:border-white/10 relative overflow-hidden">
-            <div class="absolute -right-8 -top-8 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <!-- Card 2 (Span 5 cols): Google Calendar Single Source of Truth -->
+          <div class="lg:col-span-5 glass-surface-interactive rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden">
+            <div class="absolute -right-8 -top-8 w-40 h-40 bg-googleBlue/10 rounded-full blur-3xl pointer-events-none"></div>
             <div>
-              <div class="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-500 flex items-center justify-center mb-6">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <div class="w-12 h-12 rounded-2xl bg-googleBlue/10 border border-googleBlue/20 text-googleBlue flex items-center justify-center mb-6 shadow-sm">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
               </div>
-              <span class="text-xs font-bold text-blue-500 uppercase tracking-wider">Sin DBs Intermedias</span>
-              <h4 class="text-2xl font-bold text-slate-900 dark:text-white mt-1 mb-3">
+              <span class="text-xs font-mono font-bold text-googleBlue uppercase tracking-wider">Soberanía de Datos</span>
+              <h3 class="text-2xl font-bold text-titanium mt-1.5 mb-3">
                 Google Calendar como única fuente de verdad
-              </h4>
-              <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">
-                No almacenamos tus contactos en una base de datos propia. Todo vive de forma soberana en tu cuenta de Google Calendar. Si eliminas un evento en tu app de calendario, desaparece del sistema inmediatamente.
+              </h3>
+              <p class="text-mutedZinc text-sm leading-relaxed mb-6 font-sans">
+                No almacenamos los contactos en bases de datos intermedias ni CRM propietarios. Todo vive de forma soberana en tu cuenta oficial de Google Calendar. Si borras un evento en tu app de calendario, desaparece del sistema inmediatamente.
               </p>
             </div>
-            <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-300">
+            <ul class="space-y-2.5 text-xs text-mutedZinc font-sans">
               <li class="flex items-center space-x-2">
-                <span class="text-emerald-500 font-bold">✓</span>
-                <span>Notificaciones nativas en iPhone, Android y Wearables</span>
+                <span class="text-emeraldBrand font-bold">✓</span>
+                <span>Notificaciones push nativas en iPhone, Android y Apple Watch</span>
               </li>
               <li class="flex items-center space-x-2">
-                <span class="text-emerald-500 font-bold">✓</span>
-                <span>Teléfono de contacto en extendedProperties.shared</span>
+                <span class="text-emeraldBrand font-bold">✓</span>
+                <span>Teléfono indexado en <code class="font-mono text-emeraldBrand bg-black/40 px-1 py-0.5 rounded">extendedProperties.shared</code></span>
               </li>
               <li class="flex items-center space-x-2">
-                <span class="text-emerald-500 font-bold">✓</span>
-                <span>Hard-delete inmediato al cerrar o descartar el prospecto</span>
+                <span class="text-emeraldBrand font-bold">✓</span>
+                <span>Hard-delete inmediato sin sincronizaciones residuales</span>
               </li>
             </ul>
           </div>
 
-          <!-- Card 3 (6 cols): Arquitectura Multi-Tenant Aislada en Docker -->
-          <div class="lg:col-span-6 glass-card rounded-3xl p-8 flex flex-col justify-between border border-slate-200 dark:border-white/10">
+          <!-- Card 3 (Span 6 cols): Docker Multi-Tenant Architecture -->
+          <div class="lg:col-span-6 glass-surface-interactive rounded-3xl p-8 flex flex-col justify-between">
             <div>
-              <div class="w-12 h-12 rounded-2xl bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center mb-6">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 text-titanium flex items-center justify-center mb-6">
+                <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
               </div>
-              <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Aislamiento Radical</span>
-              <h4 class="text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">
-                Multi-Tenant Aislado en Docker & Traefik
-              </h4>
-              <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">
-                Cada empresa cliente opera en su propio contenedor de n8n aislado y seguro. La red interna está segmentada, con cifrado TLS 1.3 gestionado por Traefik y Let's Encrypt. Ningún cliente comparte memoria ni credenciales de Google OAuth.
+              <span class="text-xs font-mono font-bold text-mutedZinc uppercase tracking-wider">Aislamiento Radical B2B</span>
+              <h3 class="text-xl font-bold text-titanium mt-1.5 mb-3">
+                Multi-Tenant Aislado en Docker & Traefik TLS
+              </h3>
+              <p class="text-mutedZinc text-sm leading-relaxed mb-6 font-sans">
+                Cada empresa cliente opera en su propio contenedor de n8n independiente. La red interna está segmentada con cifrado TLS 1.3 gestionado por Traefik v3.3 y certificados Let's Encrypt. Ningún cliente comparte memoria, logs de webhook ni tokens OAuth.
               </p>
             </div>
-            <div class="flex items-center space-x-4 pt-4 border-t border-slate-200 dark:border-white/10 text-xs font-mono text-slate-500 dark:text-slate-400">
-              <span>Docker Compose</span>
+            <div class="flex items-center space-x-3 pt-4 border-t border-white/10 text-xs font-mono text-mutedZinc">
+              <span class="bg-black/40 px-2 py-1 rounded border border-white/5">Docker Compose</span>
               <span>•</span>
-              <span>Traefik v3.3</span>
+              <span class="bg-black/40 px-2 py-1 rounded border border-white/5">Traefik v3.3 TLS 1.3</span>
               <span>•</span>
-              <span>UFW Hardened</span>
+              <span class="bg-black/40 px-2 py-1 rounded border border-white/5">UFW Hardened</span>
             </div>
           </div>
 
-          <!-- Card 4 (6 cols): Resumen Matutino Automático a las 9:00 AM -->
-          <div class="lg:col-span-6 glass-card rounded-3xl p-8 flex flex-col justify-between border border-slate-200 dark:border-white/10">
+          <!-- Card 4 (Span 6 cols): Proactive 9:00 AM Morning Briefing -->
+          <div class="lg:col-span-6 glass-surface-interactive rounded-3xl p-8 flex flex-col justify-between">
             <div>
-              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 flex items-center justify-center mb-6">
+              <div class="w-12 h-12 rounded-2xl bg-emeraldBrand/10 border border-emeraldBrand/20 text-emeraldBrand flex items-center justify-center mb-6">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
               </div>
-              <span class="text-xs font-bold text-emerald-500 uppercase tracking-wider">Proactividad Diaria</span>
-              <h4 class="text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">
+              <span class="text-xs font-mono font-bold text-emeraldBrand uppercase tracking-wider">Proactividad Matutina</span>
+              <h3 class="text-xl font-bold text-titanium mt-1.5 mb-3">
                 Resumen matutino automático a las 9:00 AM
-              </h4>
-              <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">
-                Cada mañana, el vendedor recibe en su WhatsApp personal la lista de llamadas y seguimientos pendientes para el día. Cada prospecto incluye un enlace directo para abrir el chat de WhatsApp con un solo toque y cerrar la venta.
+              </h3>
+              <p class="text-mutedZinc text-sm leading-relaxed mb-6 font-sans">
+                A primera hora del día, el asesor recibe en su WhatsApp personal la hoja de ruta con las llamadas y reuniones agendadas. Cada prospecto incluye un hipervínculo directo <code class="text-emeraldBrand font-mono">wa.me</code> para contactarlo con un solo toque sin buscar en su libreta.
               </p>
             </div>
-            <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-white/10 text-xs text-slate-500 dark:text-slate-400">
-              <span class="flex items-center space-x-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <div class="flex items-center justify-between pt-4 border-t border-white/10 text-xs font-mono">
+              <span class="flex items-center space-x-2 text-mutedZinc">
+                <span class="w-2 h-2 rounded-full bg-emeraldBrand"></span>
                 <span>Cron diario automatizado</span>
               </span>
-              <span class="font-medium text-emerald-600 dark:text-emerald-400">0 Fugas de Prospectos</span>
+              <span class="font-bold text-emeraldBrand bg-emeraldBrand/10 px-2.5 py-1 rounded border border-emeraldBrand/20">0 Fugas de Prospectos</span>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- Architecture & Data Flow Diagram Section -->
-    <section id="arquitectura" class="py-20 bg-slate-100/60 dark:bg-slate-950/60 border-y border-slate-200/80 dark:border-white/5">
+    <!-- SECTION D: DATA FLOW & ENGINEERING ARCHITECTURE -->
+    <section id="arquitectura" class="py-20 bg-slateSurface/40 border-y border-white/[0.06]">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-16">
-          <h2 class="text-xs uppercase tracking-widest font-bold text-blue-500 mb-2">Ingeniería & Seguridad</h2>
-          <h3 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-            Flujo de Datos y Arquitectura de Contenedores
-          </h3>
-          <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-3">
-            Garantizamos la soberanía del dato con aislamiento total: n8n procesa en memoria efímera y sincroniza directamente con las APIs oficiales sin intermediarios.
+          <span class="text-xs uppercase tracking-widest font-mono font-bold text-googleBlue mb-2 inline-block">// ARQUITECTURA DE SEGURIDAD</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-titanium">
+            Flujo de Datos y Pipeline Técnico
+          </h2>
+          <p class="text-mutedZinc text-sm sm:text-base mt-3 font-sans">
+            Garantizamos la soberanía del dato con aislamiento total: n8n procesa en memoria RAM efímera y sincroniza directamente con las APIs oficiales sin intermediarios.
           </p>
         </div>
 
-        <!-- Architecture Diagram Visual -->
-        <div class="glass-card rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-white/10 max-w-5xl mx-auto shadow-2xl">
+        <!-- Flow Visual Card -->
+        <div class="glass-surface rounded-3xl p-6 sm:p-10 border border-white/10 max-w-5xl mx-auto shadow-2xl">
           <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+            
             <!-- Node 1: WhatsApp Seller -->
-            <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-emerald-500/20 text-center space-y-2">
-              <div class="w-12 h-12 mx-auto rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-bold">
+            <div class="p-5 rounded-2xl bg-black/40 border border-emeraldBrand/30 text-center space-y-2">
+              <div class="w-12 h-12 mx-auto rounded-xl bg-emeraldBrand/10 text-emeraldBrand flex items-center justify-center text-xl">
                 📱
               </div>
-              <h5 class="text-xs font-bold text-slate-900 dark:text-white">Vendedor en WhatsApp</h5>
-              <p class="text-[11px] text-slate-500">Envío de audio / nota de voz</p>
-              <span class="inline-block text-[10px] font-mono bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded">
+              <h4 class="text-xs font-bold text-titanium font-sans">Vendedor en WhatsApp</h4>
+              <p class="text-[11px] text-mutedZinc font-sans">Envío de audio / nota de voz</p>
+              <span class="inline-block text-[10px] font-mono badge-pill-emerald px-2 py-0.5 rounded">
                 Meta Cloud API v21
               </span>
             </div>
 
             <!-- Arrow 1 -->
-            <div class="hidden md:flex flex-col items-center justify-center text-slate-400">
-              <span class="text-[10px] font-mono mb-1 text-slate-500">Webhook TLS</span>
-              <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            <div class="hidden md:flex flex-col items-center justify-center text-mutedZinc">
+              <span class="text-[10px] font-mono mb-1 text-emeraldBrand">Webhook TLS</span>
+              <svg class="w-6 h-6 text-emeraldBrand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </div>
 
-            <!-- Node 2: Traefik & Docker Isolated Tenant -->
-            <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-emerald-500/40 text-center space-y-2 relative shadow-lg">
-              <div class="w-12 h-12 mx-auto rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
+            <!-- Node 2: Traefik & Docker Container -->
+            <div class="p-5 rounded-2xl bg-black/40 border-2 border-emeraldBrand/40 text-center space-y-2 relative shadow-lg">
+              <div class="w-12 h-12 mx-auto rounded-xl bg-googleBlue/10 text-googleBlue flex items-center justify-center text-xl">
                 ⚙️
               </div>
-              <h5 class="text-xs font-bold text-slate-900 dark:text-white">Docker Multi-Tenant</h5>
-              <p class="text-[11px] text-slate-500">Contenedor n8n dedicado</p>
+              <h4 class="text-xs font-bold text-titanium font-sans">Docker Multi-Tenant</h4>
+              <p class="text-[11px] text-mutedZinc font-sans">Contenedor n8n dedicado</p>
               <div class="flex flex-wrap justify-center gap-1">
-                <span class="text-[9px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">Whisper</span>
-                <span class="text-[9px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">GPT-4o-mini</span>
+                <span class="text-[9px] font-mono bg-white/10 text-titanium px-1.5 py-0.5 rounded">Whisper</span>
+                <span class="text-[9px] font-mono bg-white/10 text-titanium px-1.5 py-0.5 rounded">GPT-4o-mini</span>
               </div>
             </div>
 
             <!-- Arrow 2 -->
-            <div class="hidden md:flex flex-col items-center justify-center text-slate-400">
-              <span class="text-[10px] font-mono mb-1 text-slate-500">OAuth 2.0</span>
-              <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            <div class="hidden md:flex flex-col items-center justify-center text-mutedZinc">
+              <span class="text-[10px] font-mono mb-1 text-googleBlue">OAuth 2.0</span>
+              <svg class="w-6 h-6 text-googleBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </div>
 
             <!-- Node 3: Google Calendar API -->
-            <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-blue-500/20 text-center space-y-2">
-              <div class="w-12 h-12 mx-auto rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center font-bold">
+            <div class="p-5 rounded-2xl bg-black/40 border border-googleBlue/30 text-center space-y-2">
+              <div class="w-12 h-12 mx-auto rounded-xl bg-googleBlue/10 text-googleBlue flex items-center justify-center text-xl">
                 📅
               </div>
-              <h5 class="text-xs font-bold text-slate-900 dark:text-white">Google Calendar API</h5>
-              <p class="text-[11px] text-slate-500">Única fuente de verdad</p>
-              <span class="inline-block text-[10px] font-mono bg-blue-500/10 text-blue-500 px-2 py-0.5 rounded">
+              <h4 class="text-xs font-bold text-titanium font-sans">Google Calendar API</h4>
+              <p class="text-[11px] text-mutedZinc font-sans">Única fuente de verdad</p>
+              <span class="inline-block text-[10px] font-mono badge-pill-blue px-2 py-0.5 rounded">
                 Strict Limited Use
               </span>
             </div>
+
           </div>
 
           <!-- Bottom Technical Specs -->
-          <div class="mt-8 pt-6 border-t border-slate-200 dark:border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-            <div class="flex items-start space-x-2">
-              <span class="text-emerald-500 font-bold">●</span>
+          <div class="mt-8 pt-6 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-sans">
+            <div class="flex items-start space-x-2.5">
+              <span class="text-emeraldBrand font-bold text-base leading-none">●</span>
               <div>
-                <strong class="text-slate-900 dark:text-white block">Cero Retención en Tránsito:</strong>
-                <span class="text-slate-500">Los audios se procesan en la RAM del contenedor y se purgan inmediatamente.</span>
+                <strong class="text-titanium block">Cero Retención en Tránsito:</strong>
+                <span class="text-mutedZinc leading-relaxed">Los audios se procesan en la memoria RAM del contenedor y se purgan de inmediato.</span>
               </div>
             </div>
-            <div class="flex items-start space-x-2">
-              <span class="text-blue-500 font-bold">●</span>
+            <div class="flex items-start space-x-2.5">
+              <span class="text-googleBlue font-bold text-base leading-none">●</span>
               <div>
-                <strong class="text-slate-900 dark:text-white block">Sin Entrenamiento de IA:</strong>
-                <span class="text-slate-500">Tus datos nunca son utilizados para entrenar modelos LLM generalizados.</span>
+                <strong class="text-titanium block">Sin Entrenamiento de IA:</strong>
+                <span class="text-mutedZinc leading-relaxed">Tus datos nunca son utilizados para entrenar modelos LLM generalizados ni corpus públicos.</span>
               </div>
             </div>
-            <div class="flex items-start space-x-2">
-              <span class="text-slate-400 font-bold">●</span>
+            <div class="flex items-start space-x-2.5">
+              <span class="text-mutedZinc font-bold text-base leading-none">●</span>
               <div>
-                <strong class="text-slate-900 dark:text-white block">Aislamiento por Tenant:</strong>
-                <span class="text-slate-500">Cada cuenta cuenta con variables y tokens aislados en su propio docker-compose.</span>
+                <strong class="text-titanium block">Aislamiento por Tenant:</strong>
+                <span class="text-mutedZinc leading-relaxed">Cada organización cuenta con variables y tokens aislados en su propio stack docker-compose.</span>
               </div>
             </div>
           </div>
@@ -518,205 +632,389 @@
       </div>
     </section>
 
-    <!-- Google & Meta Verification Disclosure Section -->
+    <!-- SECTION E: INVIOLABLE LEGAL & VERIFICATION CONTRACTS (DO NOT REMOVE OR MUTATE) -->
     <section id="verificacion" class="py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="glass-card rounded-3xl p-8 sm:p-12 border border-slate-200 dark:border-white/10 max-w-4xl mx-auto space-y-8">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/10">
+        <div class="glass-surface rounded-3xl p-8 sm:p-12 border-2 border-googleBlue/30 max-w-4xl mx-auto space-y-8 shadow-2xl relative overflow-hidden">
+          
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
             <div>
-              <span class="text-xs font-bold uppercase tracking-widest text-emerald-500">Transparencia & Cumplimiento</span>
-              <h3 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mt-1">
+              <span class="text-xs font-mono font-bold uppercase tracking-widest text-emeraldBrand">// COMPLIANCE & AUDITORÍA</span>
+              <h3 class="text-2xl sm:text-3xl font-bold text-titanium mt-1 font-sans">
                 Declaración de Verificación Google & Meta
               </h3>
             </div>
             <div class="flex items-center space-x-2">
-              <span class="px-2.5 py-1 text-xs font-semibold rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+              <span class="px-3 py-1 text-xs font-semibold rounded-full badge-pill-emerald">
                 Meta Verified Partner
               </span>
-              <span class="px-2.5 py-1 text-xs font-semibold rounded bg-blue-500/10 text-blue-500 border border-blue-500/20">
+              <span class="px-3 py-1 text-xs font-semibold rounded-full badge-pill-blue">
                 Google OAuth Audit
               </span>
             </div>
           </div>
 
-          <div class="space-y-6 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-            <div class="p-4 rounded-xl bg-blue-500/5 border border-blue-500/20 space-y-2">
-              <h4 class="font-bold text-blue-600 dark:text-blue-400 flex items-center space-x-2">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          <!-- Strict Mandatory Disclosures -->
+          <div class="space-y-6 text-sm text-mutedZinc leading-relaxed font-sans">
+            
+            <!-- 1. Google Limited Use Clause (MANDATORY VERBATIM REQUIREMENT) -->
+            <div class="p-5 rounded-2xl bg-googleBlue/10 border border-googleBlue/30 space-y-3">
+              <h4 class="font-bold text-blue-300 flex items-center space-x-2 text-sm">
+                <svg class="w-4 h-4 text-googleBlue" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
                 <span>Google API Services User Data Policy (Limited Use)</span>
               </h4>
-              <p class="italic text-xs text-slate-700 dark:text-slate-200">
-                "Seguiwats' use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer" class="underline text-blue-500">Google API Services User Data Policy</a>, including the Limited Use requirements."
+              <p class="text-xs text-titanium font-medium italic bg-black/30 p-3 rounded-xl border border-white/5">
+                "Seguiwats' use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer" class="underline text-blue-400 font-semibold hover:text-blue-300">Google API Services User Data Policy</a>, including the Limited Use requirements."
               </p>
-              <p class="text-xs text-slate-500 dark:text-slate-400">
+              <p class="text-xs text-mutedZinc">
                 El uso y transferencia a cualquier otra aplicación de la información recibida a través de las APIs de Google por parte de Seguiwats cumplirá con la Política de Datos del Usuario de los Servicios de la API de Google, incluidos los requisitos de Uso Limitado.
               </p>
             </div>
 
+            <!-- Granular Scopes & WhatsApp Policy -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-              <div class="space-y-2">
-                <h5 class="font-semibold text-slate-900 dark:text-white flex items-center space-x-1.5">
+              
+              <!-- 2. Explicit Google Calendar Scopes -->
+              <div class="space-y-2.5">
+                <h4 class="font-semibold text-titanium flex items-center space-x-2 text-sm">
                   <span>📅</span>
                   <span>Alcances de Google Calendar API Solicitados</span>
-                </h5>
-                <ul class="space-y-1.5 text-xs text-slate-500 dark:text-slate-400 font-mono">
-                  <li class="bg-slate-100 dark:bg-slate-900/60 p-2 rounded border border-slate-200 dark:border-white/5">
-                    <strong>https://www.googleapis.com/auth/calendar.events</strong>
-                    <p class="font-sans text-[11px] text-slate-500 mt-0.5">Crear, leer y modificar únicamente eventos de seguimiento comercial solicitados por el usuario.</p>
+                </h4>
+                <ul class="space-y-2 text-xs font-mono text-mutedZinc">
+                  <li class="bg-black/30 p-3 rounded-xl border border-white/5 space-y-1">
+                    <strong class="text-blue-300 block break-all">https://www.googleapis.com/auth/calendar.events</strong>
+                    <p class="font-sans text-[11px] text-mutedZinc">Crear, leer y modificar únicamente eventos de seguimiento comercial solicitados expresamente por el usuario.</p>
                   </li>
-                  <li class="bg-slate-100 dark:bg-slate-900/60 p-2 rounded border border-slate-200 dark:border-white/5">
-                    <strong>https://www.googleapis.com/auth/calendar</strong>
-                    <p class="font-sans text-[11px] text-slate-500 mt-0.5">Sincronización del calendario comercial del vendedor para el resumen matutino diario de las 9:00 AM.</p>
+                  <li class="bg-black/30 p-3 rounded-xl border border-white/5 space-y-1">
+                    <strong class="text-blue-300 block break-all">https://www.googleapis.com/auth/calendar</strong>
+                    <p class="font-sans text-[11px] text-mutedZinc">Sincronización del calendario comercial del vendedor para el resumen matutino diario de las 9:00 AM.</p>
                   </li>
                 </ul>
               </div>
 
-              <div class="space-y-2">
-                <h5 class="font-semibold text-slate-900 dark:text-white flex items-center space-x-1.5">
+              <!-- 3. WhatsApp Meta Cloud API v21.0 Context -->
+              <div class="space-y-2.5">
+                <h4 class="font-semibold text-titanium flex items-center space-x-2 text-sm">
                   <span>💬</span>
-                  <span>WhatsApp Cloud API (Meta Platforms)</span>
-                </h5>
-                <ul class="space-y-1.5 text-xs text-slate-500 dark:text-slate-400">
-                  <li class="bg-slate-100 dark:bg-slate-900/60 p-2 rounded border border-slate-200 dark:border-white/5">
-                    <strong>messages & webhooks:</strong> Se utiliza exclusivamente para recibir los dictados del vendedor y enviar la confirmación inmediata y el resumen de agenda.
+                  <span>WhatsApp Meta Cloud API v21.0 Context</span>
+                </h4>
+                <ul class="space-y-2 text-xs font-sans text-mutedZinc">
+                  <li class="bg-black/30 p-3 rounded-xl border border-white/5 space-y-1">
+                    <strong class="text-emeraldBrand font-mono block">messages & webhooks:</strong>
+                    <p class="text-[11px] text-mutedZinc">Se utiliza exclusivamente para recibir los dictados del vendedor y enviar la confirmación inmediata y el resumen de agenda.</p>
                   </li>
-                  <li class="bg-slate-100 dark:bg-slate-900/60 p-2 rounded border border-slate-200 dark:border-white/5">
-                    <strong>Cero Spam / Opt-in Estricto:</strong> Únicamente se interactúa con números telefónicos del equipo comercial debidamente registrados.
+                  <li class="bg-black/30 p-3 rounded-xl border border-white/5 space-y-1">
+                    <strong class="text-emeraldBrand font-mono block">Cero Spam / Opt-in Estricto:</strong>
+                    <p class="text-[11px] text-mutedZinc">WhatsApp messaging se usa exclusivamente para dictados de vendedores autorizados y resúmenes de agenda, con cero spam y consentimiento previo explícito.</p>
                   </li>
                 </ul>
               </div>
+
+            </div>
+
+            <!-- 4. Data Privacy Guarantee -->
+            <div class="p-3.5 rounded-xl bg-black/40 border border-white/5 text-xs text-mutedZinc flex items-center space-x-3">
+              <span class="text-lg">🛡️</span>
+              <p>
+                <strong class="text-titanium">Garantía de Privacidad de Datos:</strong> Tus datos <span class="text-emeraldBrand font-semibold">NUNCA</span> son vendidos ni transferidos con fines publicitarios, y <span class="text-emeraldBrand font-semibold">NUNCA</span> se emplean para el entrenamiento de modelos de inteligencia artificial generalistas.
+              </p>
             </div>
           </div>
 
-          <div class="pt-4 border-t border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs">
-            <span class="text-slate-500">¿Deseas consultar todos los detalles legales?</span>
+          <!-- Footer Verification Actions -->
+          <div class="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+            <span class="text-mutedZinc">¿Deseas auditar la documentación legal completa?</span>
             <div class="flex space-x-4">
-              <a href="/privacy.html" class="text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">Ver Política de Privacidad →</a>
-              <a href="/data-deletion.html" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Instrucciones de Eliminación →</a>
+              <a href="/privacy.html" class="text-emeraldBrand font-semibold hover:underline flex items-center space-x-1">
+                <span>Ver Política de Privacidad</span>
+                <span>→</span>
+              </a>
+              <a href="/data-deletion.html" class="text-blue-400 font-semibold hover:underline flex items-center space-x-1">
+                <span>Instrucciones de Eliminación</span>
+                <span>→</span>
+              </a>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- FAQ Section -->
-    <section id="faq" class="py-20 bg-slate-50/50 dark:bg-slate-950/40 border-t border-slate-200/80 dark:border-white/5">
+    <!-- SECTION F: FREQUENTLY ASKED QUESTIONS (FAQ) -->
+    <section id="faq" class="py-20 bg-slateSurface/30 border-t border-white/[0.06]">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <h2 class="text-xs uppercase tracking-widest font-bold text-emerald-500 mb-2">Preguntas Frecuentes</h2>
-          <h3 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Todo lo que necesitas saber sobre Seguiwats
-          </h3>
+          <span class="text-xs uppercase tracking-widest font-mono font-bold text-emeraldBrand mb-2 inline-block">// RESPUESTAS TÉCNICAS</span>
+          <h2 class="text-3xl font-extrabold tracking-tight text-titanium font-sans">
+            Preguntas Frecuentes
+          </h2>
         </div>
 
         <div class="space-y-4">
-          <!-- FAQ Item 1 -->
-          <div class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-white/10">
-            <h4 class="text-base font-semibold text-slate-900 dark:text-white mb-2">
+          <div class="glass-surface-interactive rounded-2xl p-6">
+            <h3 class="text-base font-semibold text-titanium mb-2">
               ¿Por qué Seguiwats utiliza Google Calendar en lugar de una base de datos propia?
-            </h4>
-            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Por soberanía del dato y simplicidad de adopción. Google Calendar ya ofrece aplicaciones nativas ultra-optimizadas para iOS, Android y smartwatch, notificaciones confiables en el huso horario local y control total del usuario. Si decides dejar el servicio, tus eventos siguen en tu calendario, sin procesos de migración complejos.
+            </h3>
+            <p class="text-sm text-mutedZinc leading-relaxed">
+              Por soberanía del dato y simplicidad de adopción. Google Calendar ofrece apps nativas ultra-optimizadas para iOS, Android y smartwatch, recordatorios confiables en el huso horario local y control absoluto del usuario. Si decides cancelar el servicio, tus eventos siguen intactos en tu calendario sin necesidad de migraciones engorrosas.
             </p>
           </div>
 
-          <!-- FAQ Item 2 -->
-          <div class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-white/10">
-            <h4 class="text-base font-semibold text-slate-900 dark:text-white mb-2">
-              ¿Mis mensajes o notas de voz se usan para entrenar inteligencia artificial?
-            </h4>
-            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              <strong>Rotundamente no.</strong> Utilizamos los endpoints empresariales de OpenRouter / OpenAI con cláusula de cero retención para entrenamiento (zero-data retention). La información de tus clientes jamás se incorpora a corpus de entrenamiento.
+          <div class="glass-surface-interactive rounded-2xl p-6">
+            <h3 class="text-base font-semibold text-titanium mb-2">
+              ¿Mis audios o mensajes de WhatsApp se usan para entrenar modelos de IA?
+            </h3>
+            <p class="text-sm text-mutedZinc leading-relaxed">
+              <strong>Rotundamente no.</strong> Empleamos endpoints corporativos con acuerdos estrictos de cero retención de datos (Zero Data Retention). Ninguna nota de voz, transcripción o dato de contacto se incorpora a corpus de entrenamiento.
             </p>
           </div>
 
-          <!-- FAQ Item 3 -->
-          <div class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-white/10">
-            <h4 class="text-base font-semibold text-slate-900 dark:text-white mb-2">
-              ¿Cómo se aíslan los datos entre distintas empresas o clientes?
-            </h4>
-            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Operamos con una arquitectura Multi-Tenant aislada en Docker. Cada organización tiene su propio contenedor de n8n independiente con sus propias credenciales encriptadas y volúmenes de almacenamiento no compartidos bajo Traefik v3.3.
+          <div class="glass-surface-interactive rounded-2xl p-6">
+            <h3 class="text-base font-semibold text-titanium mb-2">
+              ¿Cómo se aíslan las empresas clientes en la infraestructura?
+            </h3>
+            <p class="text-sm text-mutedZinc leading-relaxed">
+              Operamos con una arquitectura Multi-Tenant aislada en Docker. Cada compañía dispone de su propio contenedor de n8n independiente con variables encriptadas y volúmenes dedicados detrás del proxy inverso Traefik v3.3 con TLS 1.3.
             </p>
           </div>
 
-          <!-- FAQ Item 4 -->
-          <div class="glass-card rounded-2xl p-6 border border-slate-200 dark:border-white/10">
-            <h4 class="text-base font-semibold text-slate-900 dark:text-white mb-2">
-              ¿Cómo puedo eliminar mis datos o revocar el acceso a Google Calendar?
-            </h4>
-            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Puedes revocar el acceso a la aplicación en cualquier momento desde tu panel de seguridad de Google (<a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer" class="underline text-blue-500">myaccount.google.com/permissions</a>) o solicitar la eliminación total de credenciales siguiendo las <a href="/data-deletion.html" class="underline text-emerald-500">instrucciones de eliminación de datos</a>.
+          <div class="glass-surface-interactive rounded-2xl p-6">
+            <h3 class="text-base font-semibold text-titanium mb-2">
+              ¿Cómo puedo revocar el acceso a Google Calendar o solicitar la eliminación total?
+            </h3>
+            <p class="text-sm text-mutedZinc leading-relaxed">
+              Puedes revocar permisos en cualquier momento desde <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer" class="underline text-blue-400 hover:text-blue-300 font-mono">myaccount.google.com/permissions</a> o solicitar la purga de credenciales siguiendo las <a href="/data-deletion.html" class="underline text-emeraldBrand hover:text-emeraldBrand-hover font-mono">instrucciones de eliminación de datos</a>.
             </p>
           </div>
         </div>
       </div>
     </section>
+
   </main>
 
-  <!-- Footer -->
-  <footer class="glass-panel border-t border-slate-200/80 dark:border-white/10 py-12 transition-colors">
+  <!-- FOOTER WITH LEGAL LINKS AND MANDATORY COMPLIANCE ATTRIBUTION -->
+  <footer class="glass-surface border-t border-white/10 py-14">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-        <!-- Brand Info -->
+        
+        <!-- Brand identity col -->
         <div class="space-y-4 md:col-span-1">
           <a href="/" class="flex items-center space-x-2">
-            <div class="w-7 h-7 rounded-lg bg-slate-900 dark:bg-slate-800 border border-slate-700 flex items-center justify-center">
-              <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <div class="w-7 h-7 rounded-lg bg-slate-900 border border-emeraldBrand/40 flex items-center justify-center">
+              <svg class="w-4 h-4 text-emeraldBrand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </div>
-            <span class="text-lg font-bold text-slate-900 dark:text-white">Segui<span class="text-emerald-500">wats</span></span>
+            <span class="text-lg font-bold text-titanium">Segui<span class="text-emeraldBrand">wats</span></span>
           </a>
-          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+          <p class="text-xs text-mutedZinc leading-relaxed">
             Asistente inteligente de seguimiento comercial por WhatsApp con Google Calendar como única fuente de verdad.
           </p>
         </div>
 
-        <!-- Links: Producto -->
+        <!-- Col 2: Navigation -->
         <div class="space-y-2 text-xs">
-          <h5 class="font-bold uppercase tracking-wider text-slate-900 dark:text-white">Producto</h5>
-          <ul class="space-y-1.5 text-slate-500 dark:text-slate-400">
-            <li><a href="#como-funciona" class="hover:text-emerald-500 transition">Cómo Funciona</a></li>
-            <li><a href="#simulador" class="hover:text-emerald-500 transition">Simulador en Vivo</a></li>
-            <li><a href="#caracteristicas" class="hover:text-emerald-500 transition">Ventajas</a></li>
-            <li><a href="#arquitectura" class="hover:text-emerald-500 transition">Arquitectura</a></li>
+          <h4 class="font-bold uppercase tracking-wider text-titanium font-mono">Producto</h4>
+          <ul class="space-y-2 text-mutedZinc">
+            <li><a href="#como-funciona" class="hover:text-titanium transition">Cómo Funciona</a></li>
+            <li><a href="#simulador" class="hover:text-titanium transition">Simulador en Vivo</a></li>
+            <li><a href="#caracteristicas" class="hover:text-titanium transition">Ventajas</a></li>
+            <li><a href="#arquitectura" class="hover:text-titanium transition">Arquitectura Docker</a></li>
           </ul>
         </div>
 
-        <!-- Links: Cumplimiento & Legal -->
+        <!-- Col 3: Mandatory Legal Links (Sección 5 de DESIGN.md) -->
         <div class="space-y-2 text-xs">
-          <h5 class="font-bold uppercase tracking-wider text-slate-900 dark:text-white">Legal & Compliance</h5>
-          <ul class="space-y-1.5 text-slate-500 dark:text-slate-400">
-            <li><a href="/privacy.html" class="hover:text-emerald-500 transition">Política de Privacidad</a></li>
-            <li><a href="/terms.html" class="hover:text-emerald-500 transition">Términos de Servicio</a></li>
-            <li><a href="/data-deletion.html" class="hover:text-emerald-500 transition">Eliminación de Datos (Meta)</a></li>
-            <li><a href="#verificacion" class="hover:text-emerald-500 transition">Uso de APIs de Google</a></li>
+          <h4 class="font-bold uppercase tracking-wider text-titanium font-mono">Legal & Compliance</h4>
+          <ul class="space-y-2 text-mutedZinc">
+            <li><a href="/privacy.html" class="hover:text-emeraldBrand transition">Política de Privacidad</a></li>
+            <li><a href="/terms.html" class="hover:text-emeraldBrand transition">Términos de Servicio</a></li>
+            <li><a href="/data-deletion.html" class="hover:text-emeraldBrand transition">Eliminación de Datos (Meta)</a></li>
+            <li><a href="#verificacion" class="hover:text-blue-400 transition">Uso de APIs de Google</a></li>
           </ul>
         </div>
 
-        <!-- Contact & Tech Support -->
+        <!-- Col 4: Corporate Support & Contact -->
         <div class="space-y-2 text-xs">
-          <h5 class="font-bold uppercase tracking-wider text-slate-900 dark:text-white">Soporte Técnico</h5>
-          <p class="text-slate-500 dark:text-slate-400">
-            Para consultas de verificación comercial, integraciones o auditoría:
+          <h4 class="font-bold uppercase tracking-wider text-titanium font-mono">Soporte Técnico</h4>
+          <p class="text-mutedZinc">
+            Para consultas de verificación comercial, integraciones o auditorías técnicas:
           </p>
-          <a href="mailto:soporte@seguiwats.com" class="inline-flex items-center space-x-1.5 text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
+          <a href="mailto:soporte@seguiwats.com" class="inline-flex items-center space-x-1.5 text-emeraldBrand font-mono font-semibold hover:underline">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             <span>soporte@seguiwats.com</span>
           </a>
-          <p class="text-[11px] text-slate-400 pt-1">Buenos Aires, Argentina • Operación Global</p>
+          <p class="text-[11px] text-mutedZinc/70 pt-1 font-mono">Buenos Aires, Argentina • Operación Global</p>
         </div>
+
       </div>
 
       <!-- Copyright & Disclaimer -->
-      <div class="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
+      <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-mutedZinc font-sans">
         <p>© 2026 Seguiwats. Todos los derechos reservados.</p>
-        <p class="text-center sm:text-right">
+        <p class="text-center sm:text-right text-mutedZinc/70">
           WhatsApp es una marca registrada de Meta Platforms, Inc. Google Calendar es una marca registrada de Google LLC.
         </p>
       </div>
     </div>
   </footer>
 
-  <script type="module" src="/src/main.js"></script>
+  <!-- INTERACTIVE SIMULATOR LOGIC (Spring-like smooth flow) -->
+  <script>
+    function resetSimulator() {
+      const messagesContainer = document.getElementById('demo-chat-messages');
+      messagesContainer.innerHTML = `
+        <div id="chat-empty-hint" class="text-center py-10 text-xs text-mutedZinc space-y-2">
+          <p>Haz clic abajo en <strong class="text-emeraldBrand">"Simular Nota de Voz (0:07)"</strong> para disparar la transcripción y sincronización automática.</p>
+          <p class="font-mono text-[11px] text-mutedZinc/70">Audio real de asesor en ruta dictando seguimiento</p>
+        </div>
+      `;
+      document.getElementById('calendar-empty-state').classList.remove('hidden');
+      document.getElementById('calendar-live-event').classList.add('hidden');
+      
+      // Reset pipeline steps
+      for (let i = 1; i <= 4; i++) {
+        const step = document.getElementById(`step-${i}`);
+        if (i === 1) {
+          step.className = "pipeline-step p-3 rounded-xl border border-emeraldBrand/40 bg-emeraldBrand/5 transition-all duration-300 flex items-center space-x-2.5";
+        } else {
+          step.className = "pipeline-step p-3 rounded-xl border border-white/10 bg-slateSurface transition-all duration-300 flex items-center space-x-2.5 opacity-60";
+        }
+      }
+    }
+
+    function runAudioSimulation() {
+      const messagesContainer = document.getElementById('demo-chat-messages');
+      messagesContainer.innerHTML = '';
+
+      // 1. Step 1 Active
+      updateStep(1, true);
+
+      // Inbound User Audio Bubble
+      const audioBubble = document.createElement('div');
+      audioBubble.className = "flex justify-end";
+      audioBubble.innerHTML = `
+        <div class="bg-emeraldBrand text-obsidian rounded-2xl rounded-tr-xs p-3 max-w-[85%] shadow-md space-y-1.5">
+          <div class="flex items-center space-x-2.5">
+            <button class="w-8 h-8 rounded-full bg-obsidian text-emeraldBrand flex items-center justify-center text-xs shadow">
+              ▶
+            </button>
+            <div class="flex items-center space-x-1 h-5">
+              <span class="w-1 bg-obsidian h-3 rounded-full"></span>
+              <span class="w-1 bg-obsidian h-5 rounded-full"></span>
+              <span class="w-1 bg-obsidian h-2 rounded-full"></span>
+              <span class="w-1 bg-obsidian h-4 rounded-full"></span>
+              <span class="w-1 bg-obsidian h-5 rounded-full"></span>
+              <span class="w-1 bg-obsidian h-3 rounded-full"></span>
+              <span class="w-1 bg-obsidian h-1 rounded-full"></span>
+            </div>
+            <span class="text-xs font-mono font-bold">0:07</span>
+          </div>
+          <p class="text-[10px] text-obsidian/70 font-mono text-right">10:02 AM • Entregado</p>
+        </div>
+      `;
+      messagesContainer.appendChild(audioBubble);
+
+      // 2. Step 2 Whisper ASR
+      setTimeout(() => {
+        updateStep(2, true);
+        const transcribingBubble = document.createElement('div');
+        transcribingBubble.id = "transcription-indicator";
+        transcribingBubble.className = "flex justify-start";
+        transcribingBubble.innerHTML = `
+          <div class="bg-slateSurface border border-white/10 text-mutedZinc rounded-2xl rounded-tl-xs p-3 text-xs max-w-[85%] space-y-1 font-mono flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-emeraldBrand animate-ping"></span>
+            <span>Whisper Turbo procesando audio... (0.8s)</span>
+          </div>
+        `;
+        messagesContainer.appendChild(transcribingBubble);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }, 700);
+
+      // 3. Step 3 LLM Extraction
+      setTimeout(() => {
+        updateStep(3, true);
+        const indicator = document.getElementById("transcription-indicator");
+        if (indicator) {
+          indicator.innerHTML = `
+            <div class="bg-slateSurface border border-emeraldBrand/30 text-titanium rounded-2xl rounded-tl-xs p-3 text-xs max-w-[90%] space-y-1.5 font-sans">
+              <p class="text-[11px] text-emeraldBrand font-mono font-bold">✓ Transcripción verificada:</p>
+              <p class="italic text-mutedZinc">"Agendame seguimiento con Carlos Gómez para el jueves a las diez de la mañana para ver el presupuesto de contenedores Docker. El número es +54 9 11 2233-4455."</p>
+            </div>
+          `;
+        }
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }, 1600);
+
+      // 4. Step 4 Calendar API v3 Confirmation
+      setTimeout(() => {
+        updateStep(4, true);
+
+        // Assistant response message in WhatsApp
+        const assistantReply = document.createElement('div');
+        assistantReply.className = "flex justify-start";
+        assistantReply.innerHTML = `
+          <div class="bg-slateSurface border border-googleBlue/30 text-titanium rounded-2xl rounded-tl-xs p-3.5 text-xs max-w-[90%] space-y-2 shadow-lg">
+            <div class="flex items-center justify-between text-googleBlue font-mono font-bold text-[11px]">
+              <span>📅 Google Calendar API v3</span>
+              <span>200 OK</span>
+            </div>
+            <p>✅ Agendé el seguimiento en tu calendario:</p>
+            <div class="bg-black/40 p-2.5 rounded-lg border border-white/5 space-y-1 font-mono text-[11px]">
+              <div><strong class="text-titanium">Evento:</strong> Seguimiento: Carlos Gómez</div>
+              <div><strong class="text-titanium">Fecha:</strong> Jueves 24 Sept • 10:00 - 10:30 AM</div>
+              <div><strong class="text-titanium">Teléfono:</strong> +54 9 11 2233-4455</div>
+            </div>
+            <p class="text-[11px] text-emeraldBrand font-sans">Te enviaré el recordatorio matutino ese día a las 9:00 AM con el botón directo a WhatsApp.</p>
+          </div>
+        `;
+        messagesContainer.appendChild(assistantReply);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Reveal event in Google Calendar Panel
+        document.getElementById('calendar-empty-state').classList.add('hidden');
+        const calEvent = document.getElementById('calendar-live-event');
+        calEvent.classList.remove('hidden');
+      }, 2400);
+    }
+
+    function runTextSimulation() {
+      const messagesContainer = document.getElementById('demo-chat-messages');
+      messagesContainer.innerHTML = '';
+      updateStep(1, true);
+
+      const textBubble = document.createElement('div');
+      textBubble.className = "flex justify-end";
+      textBubble.innerHTML = `
+        <div class="bg-emeraldBrand text-obsidian rounded-2xl rounded-tr-xs p-3 max-w-[85%] shadow-md space-y-1 font-sans text-xs">
+          <p class="font-medium">"Llamar a Carlos Gómez el jueves 10am por cotización Docker al 11 2233-4455"</p>
+          <p class="text-[10px] text-obsidian/70 font-mono text-right">10:05 AM</p>
+        </div>
+      `;
+      messagesContainer.appendChild(textBubble);
+
+      setTimeout(() => {
+        updateStep(3, true);
+        updateStep(4, true);
+        const reply = document.createElement('div');
+        reply.className = "flex justify-start";
+        reply.innerHTML = `
+          <div class="bg-slateSurface border border-emeraldBrand/40 text-titanium rounded-2xl rounded-tl-xs p-3 text-xs max-w-[90%] space-y-1.5 shadow-lg">
+            <p class="text-emeraldBrand font-mono font-bold text-[11px]">⚡ Evento agendado en 1.1s:</p>
+            <p class="text-mutedZinc">Carlos Gómez vinculado a tu Google Calendar para el jueves a las 10:00 AM.</p>
+          </div>
+        `;
+        messagesContainer.appendChild(reply);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        document.getElementById('calendar-empty-state').classList.add('hidden');
+        document.getElementById('calendar-live-event').classList.remove('hidden');
+      }, 800);
+    }
+
+    function updateStep(stepNum, active) {
+      const el = document.getElementById(`step-${stepNum}`);
+      if (active) {
+        el.className = "pipeline-step p-3 rounded-xl border border-emeraldBrand bg-emeraldBrand/10 text-titanium transition-all duration-300 flex items-center space-x-2.5 opacity-100 shadow";
+      }
+    }
+  </script>
 </body>
 </html>

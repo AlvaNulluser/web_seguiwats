@@ -13,6 +13,7 @@ export default defineConfig({
         privacy: resolve(import.meta.dirname, 'privacy.html'),
         terms: resolve(import.meta.dirname, 'terms.html'),
         dataDeletion: resolve(import.meta.dirname, 'data-deletion.html'),
+        legal: resolve(import.meta.dirname, 'legal.html'),
       },
     },
   },

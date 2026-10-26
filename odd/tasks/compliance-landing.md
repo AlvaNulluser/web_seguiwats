@@ -1,7 +1,7 @@
 # Feature: Compliance Landing & Legal Hub for Seguiwats
 
 - **Feature Name:** `compliance-landing`
-- **Branch:** `feat/compliance-landing`
+- **Branch:** `main`
 - **Design Read:** B2B SaaS landing and compliance hub for business verification (Meta Tech Provider & Google OAuth) and prospective clients, with a clean, high-trust minimalist aesthetic, leaning toward modern Tailwind utilities + semantic HTML5 + subtle glass accents.
 - **Dials (taste-skill):** `DESIGN_VARIANCE: 6` | `MOTION_INTENSITY: 3` | `VISUAL_DENSITY: 4`
 

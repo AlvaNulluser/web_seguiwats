@@ -8,7 +8,8 @@
   <title>Seguiwats — Asistente Inteligente de Seguimiento de Ventas por WhatsApp y Google Calendar</title>
   <meta name="description" content="Automatiza el seguimiento comercial dictando notas de voz en WhatsApp. Convierte audios en eventos estructurados en Google Calendar sin bases de datos intermedias.">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" href="/icon-1024.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -110,6 +111,7 @@
       transition: height 0.15s ease-in-out;
     }
   </style>
+  <script src="/nav.js" defer></script>
 </head>
 <body class="min-h-[100dvh] flex flex-col font-sans selection:bg-emeraldBrand/30 selection:text-emeraldBrand">
 
@@ -133,7 +135,7 @@
 
       <!-- Desktop Navigation Links -->
       <nav class="hidden md:flex items-center space-x-7 text-sm font-medium text-mutedZinc">
-        <a href="#como-funciona" class="hover:text-titanium transition-colors">Cómo Funciona</a>
+        <a href="#simulador" class="hover:text-titanium transition-colors">Cómo Funciona</a>
         <a href="#simulador" class="hover:text-titanium transition-colors flex items-center space-x-1.5">
           <span>Simulador</span>
           <span class="w-1.5 h-1.5 rounded-full bg-emeraldBrand animate-pulse"></span>
@@ -154,9 +156,26 @@
           <span>SLA 99.98%</span>
         </span>
         <a href="#simulador" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold rounded-lg bg-emeraldBrand hover:bg-emeraldBrand-hover text-obsidian shadow-emeraldGlow transition-all duration-150 transform active:scale-95 font-sans">
-          Probar Demo en Vivo
+          <span class="hidden sm:inline">Probar Demo en Vivo</span>
+          <span class="sm:hidden">Demo</span>
         </a>
+        <button type="button" id="mobile-menu-btn" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/10 text-titanium hover:bg-white/5 hover:border-white/20 transition-colors" aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menú de navegación">
+          <svg data-icon="open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg data-icon="close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
       </div>
+    </div>
+
+    <!-- Mobile Navigation Panel -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-white/[0.08]">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-col text-sm font-medium text-mutedZinc" aria-label="Navegación principal móvil">
+        <a href="#simulador" class="py-2.5 border-b border-white/[0.06] hover:text-titanium transition-colors">Cómo Funciona</a>
+        <a href="#simulador" class="py-2.5 border-b border-white/[0.06] hover:text-titanium transition-colors">Simulador</a>
+        <a href="#caracteristicas" class="py-2.5 border-b border-white/[0.06] hover:text-titanium transition-colors">Ventajas</a>
+        <a href="#arquitectura" class="py-2.5 border-b border-white/[0.06] hover:text-titanium transition-colors">Arquitectura</a>
+        <a href="#verificacion" class="py-2.5 border-b border-white/[0.06] hover:text-googleBlue transition-colors">Cumplimiento API</a>
+        <a href="#faq" class="py-2.5 hover:text-titanium transition-colors">FAQ</a>
+      </nav>
     </div>
   </header>
 
@@ -815,7 +834,7 @@
         <div class="space-y-2 text-xs">
           <h4 class="font-bold uppercase tracking-wider text-titanium font-mono">Producto</h4>
           <ul class="space-y-2 text-mutedZinc">
-            <li><a href="#como-funciona" class="hover:text-titanium transition">Cómo Funciona</a></li>
+            <li><a href="#simulador" class="hover:text-titanium transition">Cómo Funciona</a></li>
             <li><a href="#simulador" class="hover:text-titanium transition">Simulador en Vivo</a></li>
             <li><a href="#caracteristicas" class="hover:text-titanium transition">Ventajas</a></li>
             <li><a href="#arquitectura" class="hover:text-titanium transition">Arquitectura Docker</a></li>

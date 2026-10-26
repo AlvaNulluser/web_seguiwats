@@ -31,3 +31,16 @@
   - Route: Direct inline
   - Details: Run production build, verify static asset generation, validate semantic markup, link integrity, and responsive accessibility.
   - Evidence/Commit: `npm run build` cleanly passed in 143ms producing all 4 pages and assets in `dist/`.
+
+## Log
+
+### L1 — Static hosting without a build step (2026-10-26)
+
+User request: after publishing the repository to GitHub, proceed with everything judged pertinent.
+
+- Production site moved to `site/` and served directly by nginx; `docker-compose.yml` volume now points to `./site` instead of `./dist`.
+- Removed the Vite toolchain (`vite.config.js`, `package.json`, `package-lock.json`, `src/`, `node_modules`, `dist`). The build only minified inline CSS (~400 bytes per page) because Tailwind loads from `cdn.tailwindcss.com` and no page referenced `src/`.
+- Added `site/nav.js` with the mobile navigation toggle (`#mobile-menu-btn` / `#mobile-menu`). The desktop nav is `hidden md:flex` and had no mobile fallback, leaving the anchors unreachable on phones.
+- Replaced the dangling `/favicon.svg` reference (the file never existed) with the existing `favicon-32x32.png` and `favicon-16x16.png`.
+- Deploy becomes `git pull` plus `docker compose up -d` to remount the volume. No Node on the VPS.
+- Follow-up, not done: replace the Tailwind Play CDN with compiled CSS.

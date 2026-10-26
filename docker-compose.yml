@@ -8,7 +8,7 @@ services:
     networks:
       - seguiwats_network
     volumes:
-      - ./dist:/usr/share/nginx/html:ro
+      - ./site:/usr/share/nginx/html:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     labels:
       - "traefik.enable=true"

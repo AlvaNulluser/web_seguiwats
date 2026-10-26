@@ -6,7 +6,8 @@
   <title>Instrucciones de Eliminación de Datos — Seguiwats (Meta & Google Compliance)</title>
   <meta name="description" content="Instrucciones paso a paso para solicitar la supresión de datos de usuario y revocación de permisos conforme a Meta Platform Terms y Google API Services.">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" href="/icon-1024.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -104,6 +105,7 @@
       background: rgba(255, 255, 255, 0.22);
     }
   </style>
+  <script src="/nav.js" defer></script>
 </head>
 <body class="min-h-[100dvh] flex flex-col font-sans selection:bg-emeraldBrand/30 selection:text-emeraldBrand">
 
@@ -140,9 +142,25 @@
 
       <div class="flex items-center space-x-3">
         <a href="/#simulador" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold rounded-lg bg-emeraldBrand hover:bg-emeraldBrand-hover text-obsidian shadow-emeraldGlow transition-all duration-150 transform active:scale-95 font-sans">
-          Probar Demo en Vivo
+          <span class="hidden sm:inline">Probar Demo en Vivo</span>
+          <span class="sm:hidden">Demo</span>
         </a>
+        <button type="button" id="mobile-menu-btn" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/10 text-titanium hover:bg-white/5 hover:border-white/20 transition-colors" aria-controls="mobile-menu" aria-expanded="false" aria-label="Abrir menú de navegación">
+          <svg data-icon="open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg data-icon="close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
       </div>
+    </div>
+
+    <!-- Mobile Navigation Panel -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-white/[0.08]">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-col text-sm font-medium text-mutedZinc" aria-label="Navegación principal móvil">
+        <a href="/" class="py-2.5 border-b border-white/[0.06] hover:text-titanium transition-colors">Inicio</a>
+        <a href="/privacy.html" class="py-2.5 border-b border-white/[0.06] hover:text-titanium transition-colors">Privacidad</a>
+        <a href="/terms.html" class="py-2.5 border-b border-white/[0.06] hover:text-titanium transition-colors">Términos</a>
+        <a href="/data-deletion.html" class="py-2.5 border-b border-white/[0.06] text-emeraldBrand font-semibold" aria-current="page">Eliminación de Datos</a>
+        <a href="/#verificacion" class="py-2.5 hover:text-googleBlue transition-colors">Cumplimiento API</a>
+      </nav>
     </div>
   </header>
 
